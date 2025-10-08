@@ -1,9 +1,8 @@
-package view;
+package com.manajemen.perpustakaan.view;
 
-import java.awt.Component;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 public class ActionColumnRenderer implements TableCellRenderer {
 
@@ -15,14 +14,14 @@ public class ActionColumnRenderer implements TableCellRenderer {
         if (firstColumnValue != null && !firstColumnValue.toString().trim().isEmpty()) {
             // Jika baris berisi data, tampilkan panel tombol
             ActionPanel panel = new ActionPanel();
-            
+
             // Atur warna latar belakang agar sesuai dengan seleksi tabel
             if (isSelected) {
                 panel.setBackground(table.getSelectionBackground());
             } else {
                 panel.setBackground(table.getBackground());
             }
-            
+
             return panel;
         } else {
             // Jika baris kosong, tampilkan panel kosong

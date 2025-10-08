@@ -1,13 +1,11 @@
-package view;
+package com.manajemen.perpustakaan.view;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.AbstractCellEditor;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ActionColumnEditor extends AbstractCellEditor implements TableCellEditor {
 
@@ -18,7 +16,7 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
     // --- KONSTRUKTOR DIMULAI ---
     public ActionColumnEditor() {
         panel = new ActionPanel();
-        
+
         // Listener untuk tombol Edit
         panel.cmdEdit.addActionListener(new ActionListener() {
             @Override
@@ -53,7 +51,7 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
         if (anEvent instanceof java.awt.event.MouseEvent) {
             JTable sourceTable = (JTable) anEvent.getSource();
             int clickedRow = sourceTable.rowAtPoint(((java.awt.event.MouseEvent) anEvent).getPoint());
-            
+
             Object firstColumnValue = sourceTable.getValueAt(clickedRow, 0);
             if (firstColumnValue != null && !firstColumnValue.toString().trim().isEmpty()) {
                 return super.isCellEditable(anEvent);
@@ -66,7 +64,7 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         this.table = table;
         this.row = row;
-        
+
         panel.setBackground(table.getSelectionBackground());
         return panel;
     }
