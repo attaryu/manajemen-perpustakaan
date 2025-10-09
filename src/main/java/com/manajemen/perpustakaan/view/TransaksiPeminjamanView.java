@@ -12,7 +12,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
                 java.lang.Object.class };
 
         javax.swing.table.TableColumn aksiColumn = data_peminjaman.getColumnModel().getColumn(7);
-        
+
         aksiColumn.setCellRenderer(new ActionColumnRenderer());
         aksiColumn.setCellEditor(new ActionColumnEditor());
     }
@@ -21,7 +21,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) data_peminjaman.getModel();
 
         int barisKosong = -1;
-        
+
         for (int i = 0; i < model.getRowCount(); i++) {
             // Cek kolom pertama (Nama MHS). Jika nilainya null, berarti baris itu kosong.
             if (model.getValueAt(i, 0) == null) {
@@ -77,7 +77,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
                 data_peminjamanComponentHidden(evt);
             }
         });
-        
+
         jScrollPane1.setViewportView(data_peminjaman);
 
         txt_pencarian.addActionListener(new java.awt.event.ActionListener() {
@@ -88,7 +88,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
         btn_tambah.setBackground(new java.awt.Color(204, 204, 204));
         btn_tambah.setText("Tambah peminjam");
-        
+
         btn_tambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_tambahActionPerformed(evt);
@@ -190,5 +190,13 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
     public javax.swing.JTable getTable() {
         return this.data_peminjaman;
+    }
+
+    public javax.swing.table.TableModel getTableModel() {
+        return this.data_peminjaman.getModel();
+    }
+
+    public javax.swing.JTextField getSearchBar() {
+        return this.txt_pencarian;
     }
 }
