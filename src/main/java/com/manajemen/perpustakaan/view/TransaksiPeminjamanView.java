@@ -56,7 +56,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
         data_peminjaman.setBackground(new java.awt.Color(204, 204, 204));
         data_peminjaman.setModel(
-                new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { "Nama MHS", "NRP", "Buku",
+                new javax.swing.table.DefaultTableModel(null, new String[] { "Nama MHS", "NRP", "Buku",
                         "Nomer Eksemplar", "Status Peminjaman", "Tanggal peminjaman", "Tanggal Jatuh Tempo", "Aksi" }) {
                     Class[] types = new Class[] { java.lang.Object.class, java.lang.Object.class,
                             java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
@@ -158,8 +158,7 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_tambahActionPerformed
-        TambahPeminjaman formTambah = new TambahPeminjaman(this);
-        formTambah.setVisible(true);
+        // Event akan dihandle oleh controller
     }// GEN-LAST:event_btn_tambahActionPerformed
 
     private void txt_pencarianActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_pencarianActionPerformed
@@ -198,5 +197,9 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
     public javax.swing.JTextField getSearchBar() {
         return this.txt_pencarian;
+    }
+
+    public javax.swing.JButton getTambahButton() {
+        return this.btn_tambah;
     }
 }

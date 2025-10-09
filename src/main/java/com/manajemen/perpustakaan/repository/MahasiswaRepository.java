@@ -1,14 +1,13 @@
 package com.manajemen.perpustakaan.repository;
 
-import com.google.gson.reflect.TypeToken;
-import com.manajemen.perpustakaan.entity.Mahasiswa;
-import com.manajemen.perpustakaan.utils.JSONStorage;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collection;
+
+import com.google.gson.reflect.TypeToken;
+import com.manajemen.perpustakaan.entity.Mahasiswa;
+import com.manajemen.perpustakaan.utils.JSONStorage;
 
 public class MahasiswaRepository {
     private final JSONStorage<Mahasiswa> storage;
@@ -28,7 +27,6 @@ public class MahasiswaRepository {
             this.mahasiswaMap.put(mahasiswa.getNrp(), mahasiswa);
         }
     }
-
 
     public Mahasiswa getByNrp(String nrp) {
         return this.mahasiswaMap.get(nrp);
