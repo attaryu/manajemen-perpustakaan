@@ -8,16 +8,23 @@ import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
+import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
 
-import java.util.Collection;
+import javax.swing.table.DefaultTableModel;
+import java.util.Comparator;
+import java.util.List;
 
 public class TransaksiPeminjamanController {
+    public final TransaksiPeminjamanView view;
+
     private final BukuRepository bukuRepo;
     private final MahasiswaRepository mahasiswaRepo;
     private final EksemplarBukuRepository eksemplarBukuRepo;
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
-    public TransaksiPeminjamanController() {
+    public TransaksiPeminjamanController(TransaksiPeminjamanView view) {
+        this.view = view;
+
         this.bukuRepo = new BukuRepository();
         this.mahasiswaRepo = new MahasiswaRepository();
         this.eksemplarBukuRepo = new EksemplarBukuRepository();
@@ -27,23 +34,29 @@ public class TransaksiPeminjamanController {
     }
 
     private void init() {
-        Collection<TransaksiPeminjaman> transaksiPeminjaman = this.transaksiPeminjamanRepo.getAll();
+        List<Object[]> transaksiPeminjaman = this.transaksiPeminjamanRepo
+                .getAll()
+                .stream()
+                .sorted(Comparator.comparing(TransaksiPeminjaman::getTanggalPinjam).reversed())
+                .map((transaksi) -> {
+                    Mahasiswa peminjam = this.mahasiswaRepo.getByNrp(transaksi.getNrpPeminjam());
+                    EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(transaksi.getNomorEksemplar());
+                    Buku buku = this.bukuRepo.getByIsbn(eksemplar.getIsbn());
 
-        transaksiPeminjaman.forEach((transaksi) -> {
-            Mahasiswa peminjam = this.mahasiswaRepo.getByNrp(transaksi.getNrpPeminjam());
-            EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(transaksi.getNomorEksemplar());
-            Buku buku = this.bukuRepo.getByIsbn(eksemplar.getIsbn());
+                    return new Object[]{
+                            peminjam.getNama(),
+                            peminjam.getNrp(),
+                            buku.getJudul(),
+                            eksemplar.getNomorEksemplar(),
+                            transaksi.getStatus(),
+                            transaksi.getTanggalPinjam(),
+                            transaksi.getTanggalJatuhTempo(),
+                            null
+                    };
+                }).toList();
 
-            eksemplar.setDetailBuku(buku);
-            transaksi.setPeminjam(peminjam);
-            transaksi.setEksemplarBuku(eksemplar);
-        });
-
-        transaksiPeminjaman.forEach((transaksi) -> {
-            System.out.println("id: " + transaksi.getId());
-            System.out.println("judul eksemplar: " + transaksi.getEksemplarBuku().getDetailBuku().getJudul());
-            System.out.println("nama peminjam: " + transaksi.getPeminjam().getNama());
-            System.out.println("=============================================");
-        });
+        DefaultTableModel viewTabelModel = (DefaultTableModel) this.view.getTable().getModel();
+        transaksiPeminjaman.forEach(viewTabelModel::addRow);
+        System.out.println("initialized");
     }
 }
