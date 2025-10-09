@@ -1,0 +1,47 @@
+[
+  {
+    "id": "T006",
+    "nrpPeminjam": "5121100006",
+    "nomorEksemplar": "EK009",
+    "tanggalPinjam": "2025-10-01",
+    "tanggalJatuhTempo": "2025-10-08",
+    "tanggalKembali": "2025-10-08",
+    "status": "SELESAI"
+  },
+  {
+    "id": "T007",
+    "nrpPeminjam": "5121100007",
+    "nomorEksemplar": "EK010",
+    "tanggalPinjam": "2025-10-05",
+    "tanggalJatuhTempo": "2025-10-19",
+    "tanggalKembali": null,
+    "status": "DIPINJAM"
+  },
+  {
+    "id": "T008",
+    "nrpPeminjam": "5121100008",
+    "nomorEksemplar": "EK011",
+    "tanggalPinjam": "2025-09-15",
+    "tanggalJatuhTempo": "2025-09-22",
+    "tanggalKembali": "2025-09-25",
+    "status": "TERLAMBAT"
+  },
+  {
+    "id": "T009",
+    "nrpPeminjam": "5121100009",
+    "nomorEksemplar": "EK012",
+    "tanggalPinjam": "2025-09-25",
+    "tanggalJatuhTempo": "2025-10-02",
+    "tanggalKembali": null,
+    "status": "HILANG"
+  },
+  {
+    "id": "T010",
+    "nrpPeminjam": "5121100010",
+    "nomorEksemplar": "EK013",
+    "tanggalPinjam": "2025-09-30",
+    "tanggalJatuhTempo": "2025-10-07",
+    "tanggalKembali": null,
+    "status": "TERLAMBAT"
+  }
+]

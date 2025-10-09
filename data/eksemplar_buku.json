@@ -1,0 +1,42 @@
+[
+  {
+    "nomorEksemplar": "EK009",
+    "status": "Tersedia",
+    "isbn": "978-602-452-921-1"
+  },
+  {
+    "nomorEksemplar": "EK010",
+    "status": "DIPINJAM",
+    "isbn": "978-979-91-0309-5"
+  },
+  {
+    "nomorEksemplar": "EK011",
+    "status": "Tersedia",
+    "isbn": "978-054-501-022-1"
+  },
+  {
+    "nomorEksemplar": "EK012",
+    "status": "Tersedia",
+    "isbn": "978-602-06-3829-9"
+  },
+  {
+    "nomorEksemplar": "EK013",
+    "status": "DIPINJAM",
+    "isbn": "978-006-231-609-7"
+  },
+  {
+    "nomorEksemplar": "EK014",
+    "status": "Tersedia",
+    "isbn": "978-602-03-3398-8"
+  },
+  {
+    "nomorEksemplar": "EK015",
+    "status": "Tersedia",
+    "isbn": "978-032-176-572-3"
+  },
+  {
+    "nomorEksemplar": "EK016",
+    "status": "DIPINJAM",
+    "isbn": "978-602-481-610-2"
+  }
+]
