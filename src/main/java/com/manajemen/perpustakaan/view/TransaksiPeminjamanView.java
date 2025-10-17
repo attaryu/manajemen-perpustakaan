@@ -18,12 +18,12 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
     }
 
     public void tambahDataPeminjam(Object[] dataRow) {
-    // Dapatkan model dari tabel
-    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) data_peminjaman.getModel();
-    
-    // Cukup tambahkan baris data baru ke akhir tabel
-    model.addRow(dataRow);
-}
+        // Dapatkan model dari tabel
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) data_peminjaman.getModel();
+
+        // Cukup tambahkan baris data baru ke akhir tabel
+        model.addRow(dataRow);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -145,13 +145,8 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_tambahActionPerformed
-<<<<<<< Updated upstream
         TambahPeminjaman formTambah = new TambahPeminjaman(this);
         formTambah.setVisible(true);
-=======
-    TambahPeminjaman formTambah = new TambahPeminjaman(this);
-    formTambah.setVisible(true);
->>>>>>> Stashed changes
     }// GEN-LAST:event_btn_tambahActionPerformed
 
     private void txt_pencarianActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_pencarianActionPerformed
