@@ -79,6 +79,9 @@ public class TransaksiPeminjamanController {
 
         this.eksemplarBukuRepo.update(eksemplar);
         this.transaksiPeminjamanRepo.add(newTransaksi);
+
+        this.addView.dispose();
+        this.refreshData();
     }
 
     private List<Object[]> toRow(String search) {
