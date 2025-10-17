@@ -40,4 +40,9 @@ public class EksemplarBukuRepository {
     public Collection<EksemplarBuku> getByIsbn(String isbn) {
         return this.eksemplarBukuMap.values().stream().filter(eksemplar -> eksemplar.getIsbn().equals(isbn)).collect(Collectors.toList());
     }
+
+    public void update(EksemplarBuku eksemplarBuku) {
+        this.eksemplarBukuMap.put(eksemplarBuku.getNomorEksemplar(), eksemplarBuku);
+        this.storage.put(new ArrayList<>(this.eksemplarBukuMap.values()));
+    }
 }

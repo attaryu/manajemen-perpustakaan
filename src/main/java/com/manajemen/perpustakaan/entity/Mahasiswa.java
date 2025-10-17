@@ -19,6 +19,10 @@ public class Mahasiswa {
         this.prodi = prodi;
     }
 
+    public static Mahasiswa create(String nrp, String nama, String prodi) {
+        return new Mahasiswa(nrp, nama, prodi);
+    }
+
     public String getNrp() {
         return this.nrp;
     }

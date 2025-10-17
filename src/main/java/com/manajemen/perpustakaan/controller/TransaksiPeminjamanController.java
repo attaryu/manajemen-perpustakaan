@@ -1,7 +1,9 @@
 package com.manajemen.perpustakaan.controller;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -39,13 +41,44 @@ public class TransaksiPeminjamanController {
         this.insertTabel(this.toRow(""));
 
         this.indexView.getSearchBar().addActionListener((_) -> this.refreshData());
+
         this.indexView.getTambahButton().addActionListener((_) -> this.renderViewTambahPeminjam());
+        this.addView.getSubmitButton().addActionListener((_) -> this.createTransaksiPeminjaman());
     }
 
     private void insertTabel(List<Object[]> data) {
         DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
         viewTabelModel.setRowCount(0);
         data.forEach(viewTabelModel::addRow);
+    }
+
+    private void createTransaksiPeminjaman() {
+        Map<String, String> formData = this.addView.getFormData();
+
+        String nrp = formData.get("nrp");
+        Mahasiswa mahasiswa = this.mahasiswaRepo.getByNrp(nrp);
+
+        if (mahasiswa == null) {
+            String nama = formData.get("nama");
+            String prodi = formData.get("prodi");
+
+            mahasiswa = Mahasiswa.create(nrp, nama, prodi);
+            this.mahasiswaRepo.add(mahasiswa);
+        }
+
+        EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(
+                formData.get("eksemplar"));
+        eksemplar.setStatus(StatusEksemplar.DIPINJAM);
+
+        String tanggalKembali = formData.get("tanggalKembali");
+
+        TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
+                mahasiswa,
+                eksemplar,
+                LocalDate.parse(tanggalKembali));
+
+        this.eksemplarBukuRepo.update(eksemplar);
+        this.transaksiPeminjamanRepo.add(newTransaksi);
     }
 
     private List<Object[]> toRow(String search) {

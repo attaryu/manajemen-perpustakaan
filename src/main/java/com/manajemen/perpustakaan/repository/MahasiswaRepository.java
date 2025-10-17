@@ -31,4 +31,9 @@ public class MahasiswaRepository {
     public Mahasiswa getByNrp(String nrp) {
         return this.mahasiswaMap.get(nrp);
     }
+
+    public void add(Mahasiswa mahasiswa) {
+        this.mahasiswaMap.put(mahasiswa.getNrp(), mahasiswa);
+        this.storage.put(new ArrayList<>(this.mahasiswaMap.values()));
+    }
 }

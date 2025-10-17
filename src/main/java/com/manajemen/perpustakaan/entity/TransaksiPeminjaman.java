@@ -13,24 +13,39 @@ public class TransaksiPeminjaman {
     private final String nrpPeminjam;
     private final String nomorEksemplar;
     private final LocalDate tanggalPinjam;
-    private final LocalDate tanggalJatuhTempo;
-    private LocalDate tanggalKembali;
+    private final LocalDate tanggalKembali;
+    private LocalDate tanggalJatuhTempo;
     private StatusPeminjaman status;
 
     private transient Mahasiswa peminjam;
     private transient EksemplarBuku eksemplarBuku;
 
-    public TransaksiPeminjaman(String id, Mahasiswa peminjam, EksemplarBuku eksemplarBuku, LocalDate tanggalPinjam, LocalDate tanggalKembali, LocalDate tanggalJatuhTempo, StatusPeminjaman status) {
+    private TransaksiPeminjaman(String id, Mahasiswa peminjam, EksemplarBuku eksemplarBuku, LocalDate tanggalPinjam,
+            LocalDate tanggalKembali, LocalDate tanggalJatuhTempo, StatusPeminjaman status) {
         this.peminjam = peminjam;
         this.eksemplarBuku = eksemplarBuku;
 
         this.id = id;
         this.nrpPeminjam = this.peminjam.getNrp();
         this.nomorEksemplar = this.eksemplarBuku.getNomorEksemplar();
-        this.tanggalPinjam = tanggalPinjam;
+        this.tanggalPinjam = java.time.LocalDate.now();
         this.tanggalKembali = tanggalKembali;
         this.tanggalJatuhTempo = tanggalJatuhTempo;
         this.status = status;
+    }
+
+    public static TransaksiPeminjaman create(
+            Mahasiswa peminjam,
+            EksemplarBuku eksemplarBuku,
+            LocalDate tanggalKembali) {
+        return new TransaksiPeminjaman(
+                java.util.UUID.randomUUID().toString(),
+                peminjam,
+                eksemplarBuku,
+                java.time.LocalDate.now(),
+                tanggalKembali,
+                tanggalKembali.plusDays(7),
+                StatusPeminjaman.DIPINJAM);
     }
 
     public String getId() {
@@ -73,7 +88,15 @@ public class TransaksiPeminjaman {
         return this.tanggalJatuhTempo;
     }
 
+    public void setTanggalJatuhTempo(LocalDate tanggalJatuhTempo) {
+        this.tanggalJatuhTempo = tanggalJatuhTempo;
+    }
+
     public StatusPeminjaman getStatus() {
         return this.status;
+    }
+
+    public void setStatus(StatusPeminjaman status) {
+        this.status = status;
     }
 }

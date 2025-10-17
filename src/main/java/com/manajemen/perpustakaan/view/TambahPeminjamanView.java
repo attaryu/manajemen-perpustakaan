@@ -4,6 +4,9 @@
  */
 package com.manajemen.perpustakaan.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Wina Rahmalia
@@ -275,5 +278,22 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
 
         public javax.swing.JComboBox<String> getEksemplarDropdown() {
                 return this.jComboBox1;
+        }
+
+        public javax.swing.JButton getSubmitButton() {
+                return this.jButton3;
+        }
+
+        public Map<String, String> getFormData() {
+                Map<String, String> formData = new HashMap<>();
+
+                formData.put("nama", this.jTextField1.getText());
+                formData.put("nrp", this.jTextField2.getText());
+                formData.put("prodi", this.jTextField3.getText());
+                formData.put("tanggalKembali", this.jTextField4.getText());
+                formData.put("buku", (String) this.jComboBox2.getSelectedItem());
+                formData.put("eksemplar", (String) this.jComboBox1.getSelectedItem());
+
+                return formData;
         }
 }
