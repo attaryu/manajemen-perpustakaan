@@ -14,17 +14,6 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
         aksiColumn.setCellEditor(new ActionColumnEditor());
     }
 
-<<<<<<< HEAD
-    public void tambahDataPeminjam(Object[] dataRow) {
-        // Dapatkan model dari tabel
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) data_peminjaman.getModel();
-
-        // Cukup tambahkan baris data baru ke akhir tabel
-        model.addRow(dataRow);
-    }
-
-=======
->>>>>>> dev
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
