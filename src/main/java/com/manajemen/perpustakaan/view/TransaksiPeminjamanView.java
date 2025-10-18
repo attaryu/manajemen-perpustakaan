@@ -2,21 +2,19 @@ package com.manajemen.perpustakaan.view;
 
 public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger
-            .getLogger(TransaksiPeminjamanView.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TransaksiPeminjamanView.class.getName());
 
     public TransaksiPeminjamanView() {
         initComponents();
-        Class[] types = new Class[] { java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
-                java.lang.Object.class };
-
-        javax.swing.table.TableColumn aksiColumn = data_peminjaman.getColumnModel().getColumn(7);
-
+        Class[] types = new Class[]{
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+        };
+        javax.swing.table.TableColumn aksiColumn = data_peminjaman.getColumnModel().getColumn(8);
         aksiColumn.setCellRenderer(new ActionColumnRenderer());
         aksiColumn.setCellEditor(new ActionColumnEditor());
     }
 
+<<<<<<< HEAD
     public void tambahDataPeminjam(Object[] dataRow) {
         // Dapatkan model dari tabel
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) data_peminjaman.getModel();
@@ -25,10 +23,12 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
         model.addRow(dataRow);
     }
 
+=======
+>>>>>>> dev
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         data_peminjaman = new javax.swing.JTable();
@@ -42,29 +42,28 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
         data_peminjaman.setBackground(new java.awt.Color(204, 204, 204));
-        data_peminjaman.setModel(
-                new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { "Nama MHS", "NRP", "Buku",
-                        "Nomer Eksemplar", "Status Peminjaman", "Tanggal peminjaman", "Tanggal Jatuh Tempo", "Aksi" }) {
-                    Class[] types = new Class[] { java.lang.Object.class, java.lang.Object.class,
-                            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
-                            java.lang.Object.class, java.lang.Object.class, java.lang.Double.class };
+        data_peminjaman.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-                    public Class getColumnClass(int columnIndex) {
-                        return types[columnIndex];
-                    }
-                });
+            },
+            new String [] {
+                "Nama MHS", "NRP", "Buku", "Nomer Eksemplar", "Status Peminjaman", "Tanggal peminjaman", "Tanggal Jatuh Tempo", "id transaksi", "Aksi"
+            }
+        ));
+        data_peminjaman.setEditingColumn(0);
+        data_peminjaman.setEditingRow(0);
+        data_peminjaman.setFocusable(false);
+        data_peminjaman.setRowHeight(30);
         data_peminjaman.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 data_peminjamanComponentAdded(evt);
             }
         });
-
         data_peminjaman.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 data_peminjamanComponentHidden(evt);
             }
         });
-
         jScrollPane1.setViewportView(data_peminjaman);
 
         txt_pencarian.addActionListener(new java.awt.event.ActionListener() {
@@ -75,13 +74,13 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
         btn_tambah.setBackground(new java.awt.Color(204, 204, 204));
         btn_tambah.setText("Tambah peminjam");
-
         btn_tambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_tambahActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("DATA PEMINJAMAN BUKU");
 
@@ -91,77 +90,73 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup().addContainerGap(38, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                                javax.swing.GroupLayout.Alignment.TRAILING,
-                                jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1066,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(27, 27, 27))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                        jPanel1Layout.createSequentialGroup().addGroup(jPanel1Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel1)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(
-                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(txt_pencarian,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 567,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(218, 218, 218)
-                                                .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 159,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(90, 90, 90)))));
-        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37,
-                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txt_pencarian, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 22,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
-                        .addGap(18, 18, 18).addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377,
-                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap()));
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_pencarian, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(403, 403, 403)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(51, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1026, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_pencarian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_tambahActionPerformed
-        TambahPeminjaman formTambah = new TambahPeminjaman(this);
-        formTambah.setVisible(true);
-    }// GEN-LAST:event_btn_tambahActionPerformed
+    private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
 
-    private void txt_pencarianActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_pencarianActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_txt_pencarianActionPerformed
+    }//GEN-LAST:event_btn_tambahActionPerformed
 
-    private void data_peminjamanComponentHidden(java.awt.event.ComponentEvent evt) {// GEN-FIRST:event_data_peminjamanComponentHidden
+    private void txt_pencarianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_pencarianActionPerformed
         // TODO add your handling code here:
-    }// GEN-LAST:event_data_peminjamanComponentHidden
+    }//GEN-LAST:event_txt_pencarianActionPerformed
 
-    private void data_peminjamanComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_data_peminjamanComponentAdded
+    private void data_peminjamanComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_data_peminjamanComponentHidden
         // TODO add your handling code here:
-    }// GEN-LAST:event_data_peminjamanComponentAdded
+    }//GEN-LAST:event_data_peminjamanComponentHidden
+
+    private void data_peminjamanComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_data_peminjamanComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_data_peminjamanComponentAdded
 
     public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(() -> new TransaksiPeminjamanView().setVisible(true));
     }
 
@@ -185,5 +180,9 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
     public javax.swing.JTextField getSearchBar() {
         return this.txt_pencarian;
+    }
+
+    public javax.swing.JButton getTambahButton() {
+        return this.btn_tambah;
     }
 }

@@ -10,7 +10,7 @@ public class ActionPanel extends JPanel {
     public JButton cmdDelete;
 
     public ActionPanel() {
-        super(new FlowLayout(FlowLayout.CENTER, 5, 0));
+        super(new FlowLayout(FlowLayout.CENTER,4, 0));
         cmdEdit = new JButton("edit");
         cmdDelete = new JButton("del");
 

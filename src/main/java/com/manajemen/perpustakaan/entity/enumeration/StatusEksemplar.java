@@ -6,7 +6,9 @@ package com.manajemen.perpustakaan.entity.enumeration;
 
 public enum StatusEksemplar {
     TERSEDIA("Tersedia"),
-    DIPINJAM("Dipinjam");
+    DIPINJAM("Dipinjam"),
+    HILANG("Hilang"),
+    RUSAK("Rusak");
 
     private final String status;
 
