@@ -26,10 +26,10 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
 
-                String eksemplar = getNomorEksemplar();
+                String id = getTransaksiId();
 
                 if (ActionColumnEditor.this.actionCallback != null) {
-                    ActionColumnEditor.this.actionCallback.onEdit(eksemplar);
+                    ActionColumnEditor.this.actionCallback.onEdit(id);
                 }
             }
         }); // Listener Edit selesai
@@ -40,17 +40,17 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
 
-                String eksemplar = getNomorEksemplar();
+                String id = getTransaksiId();
 
                 if (ActionColumnEditor.this.actionCallback != null) {
-                    ActionColumnEditor.this.actionCallback.onDelete(eksemplar);
+                    ActionColumnEditor.this.actionCallback.onDelete(id);
                 }
             }
         }); // Listener Delete selesai
     }
 
-    private String getNomorEksemplar() {
-        return table.getValueAt(row, 3).toString();
+    private String getTransaksiId() {
+        return table.getValueAt(row, 8).toString();
     }
 
     // Ini adalah metode yang Anda salah letakkan sebelumnya

@@ -1,15 +1,14 @@
 package com.manajemen.perpustakaan.repository;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.reflect.TypeToken;
 import com.manajemen.perpustakaan.entity.TransaksiPeminjaman;
 import com.manajemen.perpustakaan.utils.JSONStorage;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class TransaksiPeminjamanRepository {
     private final JSONStorage<TransaksiPeminjaman> storage;
@@ -35,19 +34,6 @@ public class TransaksiPeminjamanRepository {
 
     public TransaksiPeminjaman getById(String id) {
         return this.transaksiPeminjamanMap.get(id);
-    }
-
-    public Collection<TransaksiPeminjaman> getByNrpPeminjam(String nrpPeminjam) {
-        return this.transaksiPeminjamanMap.values().stream()
-                .filter(transaksi -> transaksi.getNrpPeminjam().equals(nrpPeminjam))
-                .collect(Collectors.toList());
-    }
-
-    public TransaksiPeminjaman getByNomorEksemplar(String nomorEksemplar) {
-        return this.transaksiPeminjamanMap.values().stream()
-                .filter(transaksi -> transaksi.getNomorEksemplar().equals(nomorEksemplar))
-                .findFirst()
-                .orElse(null);
     }
 
     public void add(TransaksiPeminjaman transaksiPeminjaman) {

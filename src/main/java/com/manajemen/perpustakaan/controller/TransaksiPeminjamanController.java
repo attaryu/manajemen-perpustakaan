@@ -49,14 +49,14 @@ public class TransaksiPeminjamanController {
 
         this.indexView.setActionCallback(new ActionCallback() {
             @Override
-            public void onEdit(String eksemplar) {
-                System.out.println("Edit row data: " + eksemplar);
+            public void onEdit(String id) {
+                System.out.println("Edit row data: " + id);
                 // this.edit();
             }
 
             @Override
-            public void onDelete(String eksemplar) {
-                TransaksiPeminjamanController.this.destroy(eksemplar);
+            public void onDelete(String id) {
+                TransaksiPeminjamanController.this.destroy(id);
             }
         });
     }
@@ -137,7 +137,6 @@ public class TransaksiPeminjamanController {
 
             String nrp = formData.get("nrp");
             String tanggalJatuhTempo = formData.get("tanggalJatuhTempo");
-            System.out.println(tanggalJatuhTempo);
             String nomorEksemplar = formData.get("eksemplar");
 
             if (nrp.isEmpty() || tanggalJatuhTempo.isEmpty() || nomorEksemplar.equals("Pilih buku terlebih dahulu")) {
@@ -186,7 +185,7 @@ public class TransaksiPeminjamanController {
         }
     }
 
-    private void destroy(String eksemplar) {
+    private void destroy(String id) {
         int deleteConfirm = JOptionPane.showConfirmDialog(this.indexView,
                 "Apakah Anda yakin ingin menghapus data peminjaman ini?",
                 "Konfirmasi Hapus",
@@ -198,19 +197,17 @@ public class TransaksiPeminjamanController {
         }
 
         try {
-            TransaksiPeminjaman transaksi = this.transaksiPeminjamanRepo.getByNomorEksemplar(eksemplar);
+            TransaksiPeminjaman transaksi = this.transaksiPeminjamanRepo.getById(id);
 
             if (transaksi == null) {
                 throw new Exception("Data peminjaman tidak ditemukan.");
             }
 
-            EksemplarBuku eksemplarBuku = this.eksemplarBukuRepo.getByNomorEksemplar(eksemplar);
-
+            EksemplarBuku eksemplarBuku = this.eksemplarBukuRepo.getByNomorEksemplar(transaksi.getNomorEksemplar());
             eksemplarBuku.setStatus(StatusEksemplar.TERSEDIA);
+
             this.eksemplarBukuRepo.update(eksemplarBuku);
-
             this.transaksiPeminjamanRepo.delete(transaksi);
-
             this.refreshData();
 
             JOptionPane.showMessageDialog(this.indexView,
