@@ -44,4 +44,8 @@ public class EksemplarBuku {
     public void setStatus(StatusEksemplar status) {
         this.status = status;
     }
+
+    public boolean isAvailable() {
+        return this.status == StatusEksemplar.TERSEDIA;
+    }
 }

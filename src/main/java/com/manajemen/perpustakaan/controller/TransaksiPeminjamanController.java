@@ -5,8 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 import com.manajemen.perpustakaan.entity.Buku;
 import com.manajemen.perpustakaan.entity.EksemplarBuku;
@@ -76,37 +76,51 @@ public class TransaksiPeminjamanController {
 
             javax.swing.JComboBox<String> bukuDropdown = this.addView.getBukuDropdown();
 
+            for (java.awt.event.ActionListener listener : bukuDropdown.getActionListeners()) {
+                bukuDropdown.removeActionListener(listener);
+            }
+
+            bukuDropdown.removeAllItems();
+            bukuDropdown.addItem("Pilih buku");
+
             List<String> bukuOptions = this.bukuRepo
                     .getAll()
                     .stream()
                     .filter((buku) -> !this.eksemplarBukuRepo
                             .getByIsbn(buku.getIsbn())
                             .stream()
-                            .filter((eksemplar) -> eksemplar.getStatus() == StatusEksemplar.TERSEDIA.toString())
+                            .filter(EksemplarBuku::isAvailable)
                             .toList()
                             .isEmpty())
                     .map((buku) -> String.format("%s - %s", buku.getJudul(), buku.getIsbn()))
                     .toList();
 
-            bukuOptions.forEach((option) -> bukuDropdown.addItem(option));
+            bukuOptions.forEach(bukuDropdown::addItem);
 
             javax.swing.JComboBox<String> eksemplarDropdown = this.addView.getEksemplarDropdown();
+            eksemplarDropdown.removeAllItems();
             eksemplarDropdown.addItem("Pilih buku terlebih dahulu");
 
             bukuDropdown.addActionListener((_) -> {
-                String isbnBukuTerpilih = ((String) bukuDropdown.getSelectedItem()).split(" - ")[1].trim();
+                String selected = bukuDropdown.getSelectedItem().toString();
 
-                eksemplarDropdown.removeAllItems();
+                if (!selected.equals("Pilih buku")) {
+                    String isbnBukuTerpilih = selected
+                            .split(" - ")[1]
+                            .trim();
 
-                this.eksemplarBukuRepo
-                        .getByIsbn(isbnBukuTerpilih)
-                        .forEach((eksemplar) -> eksemplarDropdown.addItem(eksemplar.getNomorEksemplar()));
+                    eksemplarDropdown.removeAllItems();
+
+                    this.eksemplarBukuRepo
+                            .getByIsbn(isbnBukuTerpilih)
+                            .forEach((eksemplar) -> eksemplarDropdown.addItem(eksemplar.getNomorEksemplar()));
+                }
             });
 
             this.addView.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
-                    refreshData();
+                    TransaksiPeminjamanController.this.addView.resetForm();
                 }
             });
         } catch (Exception e) {
@@ -122,21 +136,30 @@ public class TransaksiPeminjamanController {
             Map<String, String> formData = this.addView.getFormData();
 
             String nrp = formData.get("nrp");
+            String tanggalKembali = formData.get("tanggalKembali");
+            String nomorEksemplar = formData.get("eksemplar");
+
+            if (nrp.isEmpty() || tanggalKembali.isEmpty() || nomorEksemplar.equals("Pilih buku terlebih dahulu")) {
+                throw new Exception("NRP, nomor eksemplar, serta tanggal kembali wajib diisi.");
+            }
+
             Mahasiswa mahasiswa = this.mahasiswaRepo.getByNrp(nrp);
 
             if (mahasiswa == null) {
                 String nama = formData.get("nama");
                 String prodi = formData.get("prodi");
 
+                if (nama.isEmpty() || prodi.isEmpty()) {
+                    throw new Exception(
+                            "Mahasiswa dengan NRP tersebut tidak ditemukan, mohon lengkapi nama serta prodinya");
+                }
+
                 mahasiswa = Mahasiswa.create(nrp, nama, prodi);
                 this.mahasiswaRepo.add(mahasiswa);
             }
 
-            EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(
-                    formData.get("eksemplar"));
+            EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(nomorEksemplar);
             eksemplar.setStatus(StatusEksemplar.DIPINJAM);
-
-            String tanggalKembali = formData.get("tanggalKembali");
 
             TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
                     mahasiswa,

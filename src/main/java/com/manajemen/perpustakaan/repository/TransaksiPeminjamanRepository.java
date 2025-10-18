@@ -57,5 +57,6 @@ public class TransaksiPeminjamanRepository {
 
     public void delete(TransaksiPeminjaman transaksiPeminjaman) {
         this.transaksiPeminjamanMap.remove(transaksiPeminjaman.getId());
+        this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));
     }
 }
