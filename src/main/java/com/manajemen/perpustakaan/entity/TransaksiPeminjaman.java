@@ -37,14 +37,14 @@ public class TransaksiPeminjaman {
     public static TransaksiPeminjaman create(
             Mahasiswa peminjam,
             EksemplarBuku eksemplarBuku,
-            LocalDate tanggalKembali) {
+            LocalDate tanggalJatuhTempo) {
         return new TransaksiPeminjaman(
                 java.util.UUID.randomUUID().toString(),
                 peminjam,
                 eksemplarBuku,
                 java.time.LocalDate.now(),
-                tanggalKembali,
-                tanggalKembali.plusDays(7),
+                null,
+                tanggalJatuhTempo,
                 StatusPeminjaman.DIPINJAM);
     }
 
