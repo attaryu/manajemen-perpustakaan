@@ -136,11 +136,12 @@ public class TransaksiPeminjamanController {
             Map<String, String> formData = this.addView.getFormData();
 
             String nrp = formData.get("nrp");
-            String tanggalKembali = formData.get("tanggalKembali");
+            String tanggalJatuhTempo = formData.get("tanggalJatuhTempo");
+            System.out.println(tanggalJatuhTempo);
             String nomorEksemplar = formData.get("eksemplar");
 
-            if (nrp.isEmpty() || tanggalKembali.isEmpty() || nomorEksemplar.equals("Pilih buku terlebih dahulu")) {
-                throw new Exception("NRP, nomor eksemplar, serta tanggal kembali wajib diisi.");
+            if (nrp.isEmpty() || tanggalJatuhTempo.isEmpty() || nomorEksemplar.equals("Pilih buku terlebih dahulu")) {
+                throw new Exception("NRP, nomor eksemplar, serta tanggal jatuh tempo wajib diisi.");
             }
 
             Mahasiswa mahasiswa = this.mahasiswaRepo.getByNrp(nrp);
@@ -164,7 +165,7 @@ public class TransaksiPeminjamanController {
             TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
                     mahasiswa,
                     eksemplar,
-                    LocalDate.parse(tanggalKembali));
+                    LocalDate.parse(tanggalJatuhTempo));
 
             this.eksemplarBukuRepo.update(eksemplar);
             this.transaksiPeminjamanRepo.add(newTransaksi);
@@ -248,7 +249,8 @@ public class TransaksiPeminjamanController {
                             transaksi.getStatus(),
                             transaksi.getTanggalPinjam(),
                             transaksi.getTanggalJatuhTempo(),
-                            null
+                            null,
+                            transaksi.getId(),
                     };
                 })
                 .filter((row) -> {
