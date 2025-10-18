@@ -21,7 +21,7 @@ public class TransaksiPeminjamanRepository {
 
         this.storage = new JSONStorage<>("transaksi_peminjaman", listType);
         ArrayList<TransaksiPeminjaman> daftarTransaksiPeminjaman = this.storage.get();
-        
+
         // Convert ArrayList to Map for faster lookup
         this.transaksiPeminjamanMap = new HashMap<>();
         for (TransaksiPeminjaman transaksi : daftarTransaksiPeminjaman) {
@@ -32,34 +32,30 @@ public class TransaksiPeminjamanRepository {
     public Collection<TransaksiPeminjaman> getAll() {
         return this.transaksiPeminjamanMap.values();
     }
-    
+
     public TransaksiPeminjaman getById(String id) {
         return this.transaksiPeminjamanMap.get(id);
     }
-    
+
     public Collection<TransaksiPeminjaman> getByNrpPeminjam(String nrpPeminjam) {
         return this.transaksiPeminjamanMap.values().stream()
                 .filter(transaksi -> transaksi.getNrpPeminjam().equals(nrpPeminjam))
                 .collect(Collectors.toList());
     }
-    
-    public Collection<TransaksiPeminjaman> getByNomorEksemplar(String nomorEksemplar) {
+
+    public TransaksiPeminjaman getByNomorEksemplar(String nomorEksemplar) {
         return this.transaksiPeminjamanMap.values().stream()
                 .filter(transaksi -> transaksi.getNomorEksemplar().equals(nomorEksemplar))
-                .collect(Collectors.toList());
+                .findFirst()
+                .orElse(null);
     }
-    
+
     public void add(TransaksiPeminjaman transaksiPeminjaman) {
         this.transaksiPeminjamanMap.put(transaksiPeminjaman.getId(), transaksiPeminjaman);
         this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));
     }
-    
-    public boolean remove(String id) {
-        TransaksiPeminjaman removed = this.transaksiPeminjamanMap.remove(id);
-        if (removed != null) {
-            this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));
-            return true;
-        }
-        return false;
+
+    public void delete(TransaksiPeminjaman transaksiPeminjaman) {
+        this.transaksiPeminjamanMap.remove(transaksiPeminjaman.getId());
     }
 }

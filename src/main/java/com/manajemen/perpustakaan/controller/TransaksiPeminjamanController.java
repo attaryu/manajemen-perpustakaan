@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 import com.manajemen.perpustakaan.entity.Buku;
 import com.manajemen.perpustakaan.entity.EksemplarBuku;
@@ -17,6 +18,7 @@ import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
+import com.manajemen.perpustakaan.view.ActionCallback;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
 
@@ -38,53 +40,170 @@ public class TransaksiPeminjamanController {
         this.indexView = indexView;
         this.addView = addView;
 
-        this.insertTabel(this.toRow(""));
+        this.index(this.convertToTableRow(""));
 
         this.indexView.getSearchBar().addActionListener((_) -> this.refreshData());
 
-        this.indexView.getTambahButton().addActionListener((_) -> this.renderViewTambahPeminjam());
-        this.addView.getSubmitButton().addActionListener((_) -> this.createTransaksiPeminjaman());
+        this.indexView.getTambahButton().addActionListener((_) -> this.create());
+        this.addView.getSubmitButton().addActionListener((_) -> this.store());
+
+        this.indexView.setActionCallback(new ActionCallback() {
+            @Override
+            public void onEdit(String eksemplar) {
+                System.out.println("Edit row data: " + eksemplar);
+                // this.edit();
+            }
+
+            @Override
+            public void onDelete(String eksemplar) {
+                TransaksiPeminjamanController.this.destroy(eksemplar);
+            }
+        });
     }
 
-    private void insertTabel(List<Object[]> data) {
+    // main method
+
+    private void index(List<Object[]> data) {
         DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
         viewTabelModel.setRowCount(0);
         data.forEach(viewTabelModel::addRow);
     }
 
-    private void createTransaksiPeminjaman() {
-        Map<String, String> formData = this.addView.getFormData();
+    private void create() {
+        try {
+            this.addView.setLocationRelativeTo(null);
+            this.addView.setVisible(true);
 
-        String nrp = formData.get("nrp");
-        Mahasiswa mahasiswa = this.mahasiswaRepo.getByNrp(nrp);
+            javax.swing.JComboBox<String> bukuDropdown = this.addView.getBukuDropdown();
 
-        if (mahasiswa == null) {
-            String nama = formData.get("nama");
-            String prodi = formData.get("prodi");
+            List<String> bukuOptions = this.bukuRepo
+                    .getAll()
+                    .stream()
+                    .filter((buku) -> !this.eksemplarBukuRepo
+                            .getByIsbn(buku.getIsbn())
+                            .stream()
+                            .filter((eksemplar) -> eksemplar.getStatus() == StatusEksemplar.TERSEDIA.toString())
+                            .toList()
+                            .isEmpty())
+                    .map((buku) -> String.format("%s - %s", buku.getJudul(), buku.getIsbn()))
+                    .toList();
 
-            mahasiswa = Mahasiswa.create(nrp, nama, prodi);
-            this.mahasiswaRepo.add(mahasiswa);
+            bukuOptions.forEach((option) -> bukuDropdown.addItem(option));
+
+            javax.swing.JComboBox<String> eksemplarDropdown = this.addView.getEksemplarDropdown();
+            eksemplarDropdown.addItem("Pilih buku terlebih dahulu");
+
+            bukuDropdown.addActionListener((_) -> {
+                String isbnBukuTerpilih = ((String) bukuDropdown.getSelectedItem()).split(" - ")[1].trim();
+
+                eksemplarDropdown.removeAllItems();
+
+                this.eksemplarBukuRepo
+                        .getByIsbn(isbnBukuTerpilih)
+                        .forEach((eksemplar) -> eksemplarDropdown.addItem(eksemplar.getNomorEksemplar()));
+            });
+
+            this.addView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    refreshData();
+                }
+            });
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this.indexView,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-        EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(
-                formData.get("eksemplar"));
-        eksemplar.setStatus(StatusEksemplar.DIPINJAM);
-
-        String tanggalKembali = formData.get("tanggalKembali");
-
-        TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
-                mahasiswa,
-                eksemplar,
-                LocalDate.parse(tanggalKembali));
-
-        this.eksemplarBukuRepo.update(eksemplar);
-        this.transaksiPeminjamanRepo.add(newTransaksi);
-
-        this.addView.dispose();
-        this.refreshData();
     }
 
-    private List<Object[]> toRow(String search) {
+    private void store() {
+        try {
+            Map<String, String> formData = this.addView.getFormData();
+
+            String nrp = formData.get("nrp");
+            Mahasiswa mahasiswa = this.mahasiswaRepo.getByNrp(nrp);
+
+            if (mahasiswa == null) {
+                String nama = formData.get("nama");
+                String prodi = formData.get("prodi");
+
+                mahasiswa = Mahasiswa.create(nrp, nama, prodi);
+                this.mahasiswaRepo.add(mahasiswa);
+            }
+
+            EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(
+                    formData.get("eksemplar"));
+            eksemplar.setStatus(StatusEksemplar.DIPINJAM);
+
+            String tanggalKembali = formData.get("tanggalKembali");
+
+            TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
+                    mahasiswa,
+                    eksemplar,
+                    LocalDate.parse(tanggalKembali));
+
+            this.eksemplarBukuRepo.update(eksemplar);
+            this.transaksiPeminjamanRepo.add(newTransaksi);
+
+            this.addView.dispose();
+            this.refreshData();
+
+            JOptionPane.showMessageDialog(this.indexView,
+                    "Peminjaman berhasil ditambahkan!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this.addView,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void destroy(String eksemplar) {
+        int deleteConfirm = JOptionPane.showConfirmDialog(this.indexView,
+                "Apakah Anda yakin ingin menghapus data peminjaman ini?",
+                "Konfirmasi Hapus",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (deleteConfirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            TransaksiPeminjaman transaksi = this.transaksiPeminjamanRepo.getByNomorEksemplar(eksemplar);
+
+            if (transaksi == null) {
+                throw new Exception("Data peminjaman tidak ditemukan.");
+            }
+
+            EksemplarBuku eksemplarBuku = this.eksemplarBukuRepo.getByNomorEksemplar(eksemplar);
+
+            eksemplarBuku.setStatus(StatusEksemplar.TERSEDIA);
+            this.eksemplarBukuRepo.update(eksemplarBuku);
+
+            this.transaksiPeminjamanRepo.delete(transaksi);
+
+            this.refreshData();
+
+            JOptionPane.showMessageDialog(this.indexView,
+                    "Peminjaman berhasil dihapus.",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this.indexView,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // utility
+
+    private List<Object[]> convertToTableRow(String search) {
         String processedSearch = search.trim().toLowerCase();
 
         return this.transaksiPeminjamanRepo
@@ -148,56 +267,8 @@ public class TransaksiPeminjamanController {
         }
     }
 
-    private void renderViewTambahPeminjam() {
-        try {
-            this.addView.setLocationRelativeTo(null);
-            this.addView.setVisible(true);
-
-            javax.swing.JComboBox<String> bukuDropdown = this.addView.getBukuDropdown();
-
-            List<String> bukuOptions = this.bukuRepo
-                    .getAll()
-                    .stream()
-                    .filter((buku) -> !this.eksemplarBukuRepo
-                            .getByIsbn(buku.getIsbn())
-                            .stream()
-                            .filter((eksemplar) -> eksemplar.getStatus() == StatusEksemplar.TERSEDIA.toString())
-                            .toList()
-                            .isEmpty())
-                    .map((buku) -> String.format("%s - %s", buku.getJudul(), buku.getIsbn()))
-                    .toList();
-
-            bukuOptions.forEach((option) -> bukuDropdown.addItem(option));
-
-            javax.swing.JComboBox<String> eksemplarDropdown = this.addView.getEksemplarDropdown();
-            eksemplarDropdown.addItem("Pilih buku terlebih dahulu");
-
-            bukuDropdown.addActionListener((_) -> {
-                String isbnBukuTerpilih = ((String) bukuDropdown.getSelectedItem()).split(" - ")[1].trim();
-
-                eksemplarDropdown.removeAllItems();
-
-                this.eksemplarBukuRepo
-                        .getByIsbn(isbnBukuTerpilih)
-                        .forEach((eksemplar) -> eksemplarDropdown.addItem(eksemplar.getNomorEksemplar()));
-            });
-
-            this.addView.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosed(java.awt.event.WindowEvent e) {
-                    refreshData();
-                }
-            });
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this.indexView,
-                    "Error membuka form tambah peminjaman: " + e.getMessage(),
-                    "Error",
-                    javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     private void refreshData() {
         String currentSearch = this.indexView.getSearchBar().getText();
-        this.insertTabel(this.toRow(currentSearch));
+        this.index(this.convertToTableRow(currentSearch));
     }
 }

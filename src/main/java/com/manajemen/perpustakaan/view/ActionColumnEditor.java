@@ -1,30 +1,36 @@
 package com.manajemen.perpustakaan.view;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
 public class ActionColumnEditor extends AbstractCellEditor implements TableCellEditor {
 
     private final ActionPanel panel;
     private JTable table;
     private int row;
+    private ActionCallback actionCallback;
 
     // --- KONSTRUKTOR DIMULAI ---
-    public ActionColumnEditor() {
+    public ActionColumnEditor(ActionCallback actionCallback) {
         panel = new ActionPanel();
+        this.actionCallback = actionCallback;
 
         // Listener untuk tombol Edit
         panel.cmdEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
-                String nama = table.getValueAt(row, 0).toString();
-                JOptionPane.showMessageDialog(null, "Tombol EDIT diklik untuk baris: " + (row + 1) + "\nNama: " + nama);
-                // TODO: Tambahkan logika untuk membuka form edit di sini
+
+                String eksemplar = getNomorEksemplar();
+
+                if (ActionColumnEditor.this.actionCallback != null) {
+                    ActionColumnEditor.this.actionCallback.onEdit(eksemplar);
+                }
             }
         }); // Listener Edit selesai
 
@@ -33,17 +39,19 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
             @Override
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
-                int response = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.removeRow(row);
+
+                String eksemplar = getNomorEksemplar();
+
+                if (ActionColumnEditor.this.actionCallback != null) {
+                    ActionColumnEditor.this.actionCallback.onDelete(eksemplar);
                 }
             }
         }); // Listener Delete selesai
     }
-    // --- KONSTRUKTOR SELESAI ---
 
-    // --- METODE-METODE OVERRIDE (YANG SEHARUSNYA) ---
+    private String getNomorEksemplar() {
+        return table.getValueAt(row, 3).toString();
+    }
 
     // Ini adalah metode yang Anda salah letakkan sebelumnya
     @Override
