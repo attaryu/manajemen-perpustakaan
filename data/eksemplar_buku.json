@@ -12,7 +12,7 @@
   {
     "nomorEksemplar": "EK014",
     "isbn": "978-602-03-3398-8",
-    "status": "TERSEDIA"
+    "status": "DIPINJAM"
   },
   {
     "nomorEksemplar": "EK013",
@@ -37,6 +37,6 @@
   {
     "nomorEksemplar": "EK009",
     "isbn": "978-602-452-921-1",
-    "status": "TERSEDIA"
+    "status": "DIPINJAM"
   }
 ]
