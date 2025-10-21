@@ -6,29 +6,29 @@ package com.manajemen.perpustakaan.entity;
 
 import com.manajemen.perpustakaan.entity.enumeration.StatusPeminjaman;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class TransaksiPeminjaman {
     private final String id;
     private final String nrpPeminjam;
     private final String nomorEksemplar;
-    private final LocalDate tanggalPinjam;
-    private final LocalDate tanggalKembali;
-    private LocalDate tanggalJatuhTempo;
+    private final Date tanggalPinjam;
+    private final Date tanggalKembali;
+    private Date tanggalJatuhTempo;
     private StatusPeminjaman status;
 
     private transient Mahasiswa peminjam;
     private transient EksemplarBuku eksemplarBuku;
 
-    private TransaksiPeminjaman(String id, Mahasiswa peminjam, EksemplarBuku eksemplarBuku, LocalDate tanggalPinjam,
-            LocalDate tanggalKembali, LocalDate tanggalJatuhTempo, StatusPeminjaman status) {
+    private TransaksiPeminjaman(String id, Mahasiswa peminjam, EksemplarBuku eksemplarBuku, Date tanggalPinjam,
+            Date tanggalKembali, Date tanggalJatuhTempo, StatusPeminjaman status) {
         this.peminjam = peminjam;
         this.eksemplarBuku = eksemplarBuku;
 
         this.id = id;
         this.nrpPeminjam = this.peminjam.getNrp();
         this.nomorEksemplar = this.eksemplarBuku.getNomorEksemplar();
-        this.tanggalPinjam = java.time.LocalDate.now();
+        this.tanggalPinjam = new Date();
         this.tanggalKembali = tanggalKembali;
         this.tanggalJatuhTempo = tanggalJatuhTempo;
         this.status = status;
@@ -37,12 +37,12 @@ public class TransaksiPeminjaman {
     public static TransaksiPeminjaman create(
             Mahasiswa peminjam,
             EksemplarBuku eksemplarBuku,
-            LocalDate tanggalJatuhTempo) {
+            Date tanggalJatuhTempo) {
         return new TransaksiPeminjaman(
                 java.util.UUID.randomUUID().toString(),
                 peminjam,
                 eksemplarBuku,
-                java.time.LocalDate.now(),
+                new Date(),
                 null,
                 tanggalJatuhTempo,
                 StatusPeminjaman.DIPINJAM);
@@ -76,19 +76,19 @@ public class TransaksiPeminjaman {
         this.eksemplarBuku = eksemplarBuku;
     }
 
-    public LocalDate getTanggalPinjam() {
+    public Date getTanggalPinjam() {
         return this.tanggalPinjam;
     }
 
-    public LocalDate getTanggalKembali() {
+    public Date getTanggalKembali() {
         return this.tanggalKembali;
     }
 
-    public LocalDate getTanggalJatuhTempo() {
+    public Date getTanggalJatuhTempo() {
         return this.tanggalJatuhTempo;
     }
 
-    public void setTanggalJatuhTempo(LocalDate tanggalJatuhTempo) {
+    public void setTanggalJatuhTempo(Date tanggalJatuhTempo) {
         this.tanggalJatuhTempo = tanggalJatuhTempo;
     }
 

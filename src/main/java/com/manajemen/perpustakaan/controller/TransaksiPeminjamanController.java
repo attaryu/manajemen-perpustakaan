@@ -1,7 +1,8 @@
 package com.manajemen.perpustakaan.controller;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -161,10 +162,19 @@ public class TransaksiPeminjamanController {
             EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(nomorEksemplar);
             eksemplar.setStatus(StatusEksemplar.DIPINJAM);
 
+            // Parse tanggal jatuh tempo dari String ke Date
+            Date tanggalJatuhTempoDate;
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                tanggalJatuhTempoDate = dateFormat.parse(tanggalJatuhTempo);
+            } catch (Exception e) {
+                throw new RuntimeException("Format tanggal jatuh tempo tidak valid: " + tanggalJatuhTempo);
+            }
+
             TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
                     mahasiswa,
                     eksemplar,
-                    LocalDate.parse(tanggalJatuhTempo));
+                    tanggalJatuhTempoDate);
 
             this.eksemplarBukuRepo.update(eksemplar);
             this.transaksiPeminjamanRepo.add(newTransaksi);
@@ -244,8 +254,8 @@ public class TransaksiPeminjamanController {
                             buku.getJudul(),
                             eksemplar.getNomorEksemplar(),
                             transaksi.getStatus(),
-                            transaksi.getTanggalPinjam(),
-                            transaksi.getTanggalJatuhTempo(),
+                            this.dateFormat(transaksi.getTanggalPinjam()),
+                            this.dateFormat(transaksi.getTanggalJatuhTempo()),
                             null,
                             transaksi.getId(),
                     };
@@ -292,5 +302,9 @@ public class TransaksiPeminjamanController {
     private void refreshData() {
         String currentSearch = this.indexView.getSearchBar().getText();
         this.index(this.convertToTableRow(currentSearch));
+    }
+
+    private String dateFormat(Date date) {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 }

@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class JSONStorage<Entity> {
@@ -24,7 +24,7 @@ public class JSONStorage<Entity> {
         this.filePath = Paths.get("data", filename + ".json");
         this.listType = listType;
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(Date.class, new DateAdapter())
                 .setPrettyPrinting()
                 .create();
 

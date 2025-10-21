@@ -4,11 +4,11 @@
  */
 package com.manajemen.perpustakaan.view;
 
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.manajemen.perpustakaan.utils.DateUtils;
 
 /**
  *
@@ -24,10 +24,8 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
         }
 
         @SuppressWarnings("unchecked")
-        // <editor-fold defaultstate="collapsed" desc="Generated
-        // Code">//GEN-BEGIN:initComponents
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
-
                 jTextField1 = new javax.swing.JTextField();
                 jTextField2 = new javax.swing.JTextField();
                 jLabel1 = new javax.swing.JLabel();
@@ -332,13 +330,10 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
                 formData.put("nrp", this.jTextField2.getText());
                 formData.put("prodi", this.jTextField3.getText());
                 formData.put("tanggalJatuhTempo", tanggalJatuhTempo != null
-                                ? Instant.ofEpochMilli(tanggalJatuhTempo.getTime())
-                                                .atZone(ZoneId.systemDefault())
-                                                .toLocalDate()
-                                                .toString()
+                                ? DateUtils.format(tanggalJatuhTempo)
                                 : "");
-                formData.put("buku", (String) this.jComboBox2.getSelectedItem());
-                formData.put("eksemplar", (String) this.jComboBox1.getSelectedItem());
+                formData.put("buku", this.jComboBox2.getSelectedItem().toString());
+                formData.put("eksemplar", this.jComboBox1.getSelectedItem().toString());
 
                 return formData;
         }
