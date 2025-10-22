@@ -19,7 +19,7 @@ import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
 import com.manajemen.perpustakaan.utils.DateUtils;
-import com.manajemen.perpustakaan.view.ActionCallback;
+import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
 import com.manajemen.perpustakaan.view.UpdatePeminjamanView;
@@ -35,11 +35,13 @@ public class TransaksiPeminjamanController {
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
     public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView,
-            UpdatePeminjamanView editView) {
-        this.bukuRepo = new BukuRepository();
-        this.mahasiswaRepo = new MahasiswaRepository();
-        this.eksemplarBukuRepo = new EksemplarBukuRepository();
-        this.transaksiPeminjamanRepo = new TransaksiPeminjamanRepository();
+            UpdatePeminjamanView editView, BukuRepository bukuRepo,
+            MahasiswaRepository mahasiswaRepo, EksemplarBukuRepository eksemplarBukuRepo,
+            TransaksiPeminjamanRepository transaksiPeminjamanRepo) {
+        this.bukuRepo = bukuRepo;
+        this.mahasiswaRepo = mahasiswaRepo;
+        this.eksemplarBukuRepo = eksemplarBukuRepo;
+        this.transaksiPeminjamanRepo = transaksiPeminjamanRepo;
 
         this.indexView = indexView;
         this.addView = addView;
