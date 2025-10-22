@@ -22,12 +22,12 @@ import com.manajemen.perpustakaan.utils.DateUtils;
 import com.manajemen.perpustakaan.view.ActionCallback;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
-import com.manajemen.perpustakaan.view.ViewUpdateData;
+import com.manajemen.perpustakaan.view.UpdatePeminjamanView;
 
 public class TransaksiPeminjamanController {
     public final TransaksiPeminjamanView indexView;
     public final TambahPeminjamanView addView;
-    public final ViewUpdateData editView;
+    public final UpdatePeminjamanView editView;
 
     private final BukuRepository bukuRepo;
     private final MahasiswaRepository mahasiswaRepo;
@@ -35,7 +35,7 @@ public class TransaksiPeminjamanController {
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
     public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView,
-            ViewUpdateData editView) {
+            UpdatePeminjamanView editView) {
         this.bukuRepo = new BukuRepository();
         this.mahasiswaRepo = new MahasiswaRepository();
         this.eksemplarBukuRepo = new EksemplarBukuRepository();

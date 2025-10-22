@@ -5,7 +5,7 @@ import javax.swing.SwingUtilities;
 import com.manajemen.perpustakaan.controller.TransaksiPeminjamanController;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
-import com.manajemen.perpustakaan.view.ViewUpdateData;
+import com.manajemen.perpustakaan.view.UpdatePeminjamanView;
 
 public class ManajemenPerpustakaan {
 
@@ -13,7 +13,7 @@ public class ManajemenPerpustakaan {
         SwingUtilities.invokeLater(() -> {
             TransaksiPeminjamanView transaksiPeminjamanView = new TransaksiPeminjamanView();
             TambahPeminjamanView tambahPeminjamanView = new TambahPeminjamanView();
-            ViewUpdateData updateView = new ViewUpdateData();
+            UpdatePeminjamanView updateView = new UpdatePeminjamanView();
 
             new TransaksiPeminjamanController(transaksiPeminjamanView, tambahPeminjamanView, updateView);
 
