@@ -330,7 +330,7 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
                 formData.put("nrp", this.jTextField2.getText());
                 formData.put("prodi", this.jTextField3.getText());
                 formData.put("tanggalJatuhTempo", tanggalJatuhTempo != null
-                                ? DateUtils.format(tanggalJatuhTempo)
+                                ? DateUtils.toString(tanggalJatuhTempo)
                                 : "");
                 formData.put("buku", this.jComboBox2.getSelectedItem().toString());
                 formData.put("eksemplar", this.jComboBox1.getSelectedItem().toString());

@@ -1,6 +1,5 @@
 package com.manajemen.perpustakaan.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -19,20 +18,24 @@ import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
+import com.manajemen.perpustakaan.utils.DateUtils;
 import com.manajemen.perpustakaan.view.ActionCallback;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
+import com.manajemen.perpustakaan.view.ViewUpdateData;
 
 public class TransaksiPeminjamanController {
     public final TransaksiPeminjamanView indexView;
     public final TambahPeminjamanView addView;
+    public final ViewUpdateData editView;
 
     private final BukuRepository bukuRepo;
     private final MahasiswaRepository mahasiswaRepo;
     private final EksemplarBukuRepository eksemplarBukuRepo;
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
-    public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView) {
+    public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView,
+            ViewUpdateData editView) {
         this.bukuRepo = new BukuRepository();
         this.mahasiswaRepo = new MahasiswaRepository();
         this.eksemplarBukuRepo = new EksemplarBukuRepository();
@@ -40,6 +43,7 @@ public class TransaksiPeminjamanController {
 
         this.indexView = indexView;
         this.addView = addView;
+        this.editView = editView;
 
         this.index(this.convertToTableRow(""));
 
@@ -51,8 +55,7 @@ public class TransaksiPeminjamanController {
         this.indexView.setActionCallback(new ActionCallback() {
             @Override
             public void onEdit(String id) {
-                System.out.println("Edit row data: " + id);
-                // this.edit();
+                TransaksiPeminjamanController.this.edit(id);
             }
 
             @Override
@@ -118,6 +121,10 @@ public class TransaksiPeminjamanController {
                 }
             });
 
+            for (java.awt.event.WindowListener listener : this.addView.getWindowListeners()) {
+                this.addView.removeWindowListener(listener);
+            }
+
             this.addView.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
@@ -160,23 +167,15 @@ public class TransaksiPeminjamanController {
             }
 
             EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(nomorEksemplar);
-            eksemplar.setStatus(StatusEksemplar.DIPINJAM);
 
-            // Parse tanggal jatuh tempo dari String ke Date
-            Date tanggalJatuhTempoDate;
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                tanggalJatuhTempoDate = dateFormat.parse(tanggalJatuhTempo);
-            } catch (Exception e) {
-                throw new RuntimeException("Format tanggal jatuh tempo tidak valid: " + tanggalJatuhTempo);
-            }
+            Date tanggalJatuhTempoDate = DateUtils.toDate(tanggalJatuhTempo);
 
             TransaksiPeminjaman newTransaksi = TransaksiPeminjaman.create(
                     mahasiswa,
                     eksemplar,
                     tanggalJatuhTempoDate);
 
-            this.eksemplarBukuRepo.update(eksemplar);
+            this.eksemplarBukuRepo.update(newTransaksi.getEksemplarBuku());
             this.transaksiPeminjamanRepo.add(newTransaksi);
 
             this.addView.dispose();
@@ -189,6 +188,91 @@ public class TransaksiPeminjamanController {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this.addView,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void edit(String id) {
+        this.editView.setVisible(true);
+        this.editView.resetForm();
+
+        javax.swing.JButton submitButton = this.editView.getSubmitButton();
+
+        for (java.awt.event.ActionListener listener : submitButton.getActionListeners()) {
+            submitButton.removeActionListener(listener);
+        }
+
+        try {
+            TransaksiPeminjaman transaksi = this.transaksiPeminjamanRepo.getById(id);
+
+            if (transaksi == null) {
+                throw new Exception("Data peminjaman tidak ditemukan.");
+            }
+
+            Mahasiswa peminjam = this.mahasiswaRepo.getByNrp(transaksi.getNrpPeminjam());
+            EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(transaksi.getNomorEksemplar());
+            Buku buku = this.bukuRepo.getByIsbn(eksemplar.getIsbn());
+
+            transaksi.setPeminjam(peminjam);
+            transaksi.setEksemplarBuku(eksemplar);
+
+            Map<String, String> formData = Map.of(
+                    "nama", peminjam.getNama(),
+                    "nrp", peminjam.getNrp(),
+                    "prodi", peminjam.getProdi(),
+                    "buku", String.format("%s - %s", buku.getJudul(), buku.getIsbn()),
+                    "tanggalPinjam", DateUtils.toString(transaksi.getTanggalPinjam()),
+                    "tanggalJatuhTempo", DateUtils.toString(transaksi.getTanggalJatuhTempo()),
+                    "tanggalKembali", DateUtils.toString(transaksi.getTanggalKembali()),
+                    "status", transaksi.getStatus().toString());
+
+            this.editView.setData(formData);
+
+            submitButton.addActionListener((_) -> this.update(transaksi));
+
+            for (java.awt.event.WindowListener listener : this.editView.getWindowListeners()) {
+                this.editView.removeWindowListener(listener);
+            }
+
+            this.editView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    TransaksiPeminjamanController.this.editView.resetForm();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this.indexView,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void update(TransaksiPeminjaman transaksi) {
+        try {
+            Map<String, String> formData = this.editView.getFormData();
+
+            transaksi.setStatus(StatusPeminjaman.getStatus(formData.get("status")));
+            transaksi.setTanggalKembali(DateUtils.toDate(formData.get("tanggalKembali")));
+            transaksi.setTanggalPinjam(DateUtils.toDate(formData.get("tanggalPinjam")));
+            transaksi.setTanggalJatuhTempo(DateUtils.toDate(formData.get("tanggalJatuhTempo")));
+
+            this.eksemplarBukuRepo.update(transaksi.getEksemplarBuku());
+            this.transaksiPeminjamanRepo.update(transaksi);
+
+            this.editView.dispose();
+            this.refreshData();
+
+            JOptionPane.showMessageDialog(this.indexView,
+                    "Data peminjaman berhasil diperbarui.",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this.editView,
                     e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -254,8 +338,8 @@ public class TransaksiPeminjamanController {
                             buku.getJudul(),
                             eksemplar.getNomorEksemplar(),
                             transaksi.getStatus(),
-                            this.dateFormat(transaksi.getTanggalPinjam()),
-                            this.dateFormat(transaksi.getTanggalJatuhTempo()),
+                            DateUtils.toString(transaksi.getTanggalPinjam()),
+                            DateUtils.toString(transaksi.getTanggalJatuhTempo()),
                             null,
                             transaksi.getId(),
                     };
@@ -302,9 +386,5 @@ public class TransaksiPeminjamanController {
     private void refreshData() {
         String currentSearch = this.indexView.getSearchBar().getText();
         this.index(this.convertToTableRow(currentSearch));
-    }
-
-    private String dateFormat(Date date) {
-        return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 }

@@ -41,6 +41,11 @@ public class TransaksiPeminjamanRepository {
         this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));
     }
 
+    public void update(TransaksiPeminjaman transaksiPeminjaman) {
+        this.transaksiPeminjamanMap.put(transaksiPeminjaman.getId(), transaksiPeminjaman);
+        this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));
+    }
+
     public void delete(TransaksiPeminjaman transaksiPeminjaman) {
         this.transaksiPeminjamanMap.remove(transaksiPeminjaman.getId());
         this.storage.put(new ArrayList<>(this.transaksiPeminjamanMap.values()));

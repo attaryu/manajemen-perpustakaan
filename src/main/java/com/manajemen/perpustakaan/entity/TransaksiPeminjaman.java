@@ -4,16 +4,17 @@
  */
 package com.manajemen.perpustakaan.entity;
 
-import com.manajemen.perpustakaan.entity.enumeration.StatusPeminjaman;
-
 import java.util.Date;
+
+import com.manajemen.perpustakaan.entity.enumeration.StatusEksemplar;
+import com.manajemen.perpustakaan.entity.enumeration.StatusPeminjaman;
 
 public class TransaksiPeminjaman {
     private final String id;
     private final String nrpPeminjam;
     private final String nomorEksemplar;
-    private final Date tanggalPinjam;
-    private final Date tanggalKembali;
+    private Date tanggalPinjam;
+    private Date tanggalKembali;
     private Date tanggalJatuhTempo;
     private StatusPeminjaman status;
 
@@ -38,7 +39,7 @@ public class TransaksiPeminjaman {
             Mahasiswa peminjam,
             EksemplarBuku eksemplarBuku,
             Date tanggalJatuhTempo) {
-        return new TransaksiPeminjaman(
+        TransaksiPeminjaman transaksi = new TransaksiPeminjaman(
                 java.util.UUID.randomUUID().toString(),
                 peminjam,
                 eksemplarBuku,
@@ -46,6 +47,10 @@ public class TransaksiPeminjaman {
                 null,
                 tanggalJatuhTempo,
                 StatusPeminjaman.DIPINJAM);
+
+        transaksi.getEksemplarBuku().setStatus(StatusEksemplar.DIPINJAM);
+
+        return transaksi;
     }
 
     public String getId() {
@@ -80,8 +85,20 @@ public class TransaksiPeminjaman {
         return this.tanggalPinjam;
     }
 
+    public void setTanggalPinjam(Date tanggalPinjam) {
+        this.tanggalPinjam = tanggalPinjam;
+    }
+
     public Date getTanggalKembali() {
         return this.tanggalKembali;
+    }
+
+    public void setTanggalKembali(Date tanggalKembali) throws Exception {
+        if (this.status != StatusPeminjaman.TERLAMBAT && this.status != StatusPeminjaman.SELESAI) {
+            throw new Exception("Tidak dapat mengatur tanggal kembali untuk status peminjaman saat ini");
+        }
+
+        this.tanggalKembali = tanggalKembali;
     }
 
     public Date getTanggalJatuhTempo() {
@@ -97,6 +114,35 @@ public class TransaksiPeminjaman {
     }
 
     public void setStatus(StatusPeminjaman status) {
+        if (this.status == status) {
+            return;
+        }
+
+        switch (status) {
+            case TERLAMBAT:
+            case SELESAI:
+                if (this.tanggalKembali == null) {
+                    this.tanggalKembali = new Date();
+                }
+
+                this.eksemplarBuku.setStatus(StatusEksemplar.TERSEDIA);
+                break;
+
+            case HILANG:
+                this.eksemplarBuku.setStatus(StatusEksemplar.HILANG);
+                this.tanggalKembali = null;
+                break;
+
+            case DIPINJAM:
+                this.eksemplarBuku.setStatus(StatusEksemplar.DIPINJAM);
+                this.tanggalKembali = null;
+                break;
+
+            default:
+                this.tanggalKembali = null;
+                break;
+        }
+
         this.status = status;
     }
 }

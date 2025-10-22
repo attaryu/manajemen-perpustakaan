@@ -29,8 +29,8 @@ public class EksemplarBuku {
         return this.isbn;
     }
 
-    public String getStatus() {
-        return this.status.toString();
+    public StatusEksemplar getStatus() {
+        return this.status;
     }
 
     public Buku getDetailBuku() {

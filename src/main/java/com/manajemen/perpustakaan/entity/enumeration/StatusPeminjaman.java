@@ -9,6 +9,17 @@ public enum StatusPeminjaman {
         this.status = status;
     }
 
+    public static StatusPeminjaman getStatus(String status) {
+        System.out.println("status from getStatus: " + status);
+        for (StatusPeminjaman statusPeminjaman : StatusPeminjaman.values()) {
+            if (statusPeminjaman.status.equalsIgnoreCase(status)) {
+                return statusPeminjaman;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public String toString() {
         return this.status;
