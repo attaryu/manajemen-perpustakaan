@@ -257,6 +257,7 @@ public class TransaksiPeminjamanController {
 
             transaksi.setStatus(StatusPeminjaman.getStatus(formData.get("status")));
             transaksi.setTanggalKembali(DateUtils.toDate(formData.get("tanggalKembali")));
+
             transaksi.setTanggalPinjam(DateUtils.toDate(formData.get("tanggalPinjam")));
             transaksi.setTanggalJatuhTempo(DateUtils.toDate(formData.get("tanggalJatuhTempo")));
 

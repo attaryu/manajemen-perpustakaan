@@ -93,9 +93,9 @@ public class TransaksiPeminjaman {
         return this.tanggalKembali;
     }
 
-    public void setTanggalKembali(Date tanggalKembali) throws Exception {
+    public void setTanggalKembali(Date tanggalKembali) {
         if (this.status != StatusPeminjaman.TERLAMBAT && this.status != StatusPeminjaman.SELESAI) {
-            throw new Exception("Tidak dapat mengatur tanggal kembali untuk status peminjaman saat ini");
+            return;
         }
 
         this.tanggalKembali = tanggalKembali;
