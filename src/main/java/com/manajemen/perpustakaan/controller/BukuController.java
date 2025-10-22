@@ -39,7 +39,7 @@ public class BukuController {
     this.indexView.setActionCallback(new ActionCallback() {
       @Override
       public void onEdit(String id) {
-        System.out.println("Edit action triggered for id: " + id);
+        BukuController.this.edit(id);
       }
 
       @Override
@@ -128,6 +128,80 @@ public class BukuController {
     } catch (Exception e) {
       JOptionPane.showMessageDialog(
           this.addView,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  private void edit(String id) {
+    try {
+      Buku buku = this.bukuRepo.getByIsbn(id);
+
+      if (buku == null) {
+        throw new Exception("Buku tidak ditemukan");
+      }
+
+      Map<String, String> data = Map.of(
+          "isbn", buku.getIsbn(),
+          "judul", buku.getJudul(),
+          "penulis", buku.getPenulis(),
+          "penerbit", buku.getPenerbit(),
+          "jumlahHalaman", String.valueOf(buku.getJumlahHalaman()));
+
+      this.editView.setForm(data);
+      this.editView.setVisible(true);
+
+      javax.swing.JButton submitButton = this.editView.getSubmitButton();
+
+      for (java.awt.event.ActionListener actionListener : submitButton.getActionListeners()) {
+        submitButton.removeActionListener(actionListener);
+      }
+
+      submitButton.addActionListener((_) -> this.update(buku));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(
+          this.indexView,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  public void update(Buku buku) {
+    try {
+      Map<String, String> formData = this.editView.getForm();
+
+      String judul = formData.get("judul");
+      String penulis = formData.get("penulis");
+      String penerbit = formData.get("penerbit");
+      String jumlahHalaman = formData.get("jumlahHalaman");
+
+      if (judul.isBlank() || penulis.isBlank() || penerbit.isBlank() || jumlahHalaman.isBlank()) {
+        throw new Exception("Semua field harus diisi.");
+      }
+
+      buku.setJudul(judul);
+      buku.setPenulis(penulis);
+      buku.setPenerbit(penerbit);
+      buku.setJumlahHalaman(Integer.parseInt(jumlahHalaman));
+
+      this.bukuRepo.update(buku);
+
+      this.editView.dispose();
+      this.refreshData();
+
+      JOptionPane.showMessageDialog(
+          this.editView,
+          "Buku berhasil diperbarui!",
+          "Success",
+          JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(
+          this.indexView,
           e.getMessage(),
           "Error",
           JOptionPane.ERROR_MESSAGE);

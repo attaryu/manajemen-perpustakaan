@@ -5,11 +5,11 @@
 package com.manajemen.perpustakaan.entity;
 
 public class Buku {
-    private final String isbn;
-    private final String judul;
-    private final String penulis;
-    private final String penerbit;
-    private final int jumlahHalaman;
+    private String isbn;
+    private String judul;
+    private String penulis;
+    private String penerbit;
+    private int jumlahHalaman;
 
     public Buku(String isbn, String judul, String penulis, String penerbit, int jumlahHalaman) {
         this.isbn = isbn;
@@ -23,19 +23,39 @@ public class Buku {
         return this.isbn;
     }
 
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
     public String getJudul() {
         return this.judul;
+    }
+
+    public void setJudul(String judul) {
+        this.judul = judul;
     }
 
     public String getPenulis() {
         return this.penulis;
     }
 
+    public void setPenulis(String penulis) {
+        this.penulis = penulis;
+    }
+
     public String getPenerbit() {
         return this.penerbit;
     }
 
+    public void setPenerbit(String penerbit) {
+        this.penerbit = penerbit;
+    }
+
     public int getJumlahHalaman() {
         return this.jumlahHalaman;
+    }
+
+    public void setJumlahHalaman(int jumlahHalaman) {
+        this.jumlahHalaman = jumlahHalaman;
     }
 }

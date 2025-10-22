@@ -41,6 +41,11 @@ public class BukuRepository {
         this.storage.put(new ArrayList<>(this.bukuMap.values()));
     }
 
+    public void update(Buku buku) {
+        this.bukuMap.put(buku.getIsbn(), buku);
+        this.storage.put(new ArrayList<>(this.bukuMap.values()));
+    }
+    
     public void delete(Buku buku) {
         this.bukuMap.remove(buku.getIsbn());
         this.storage.put(new ArrayList<>(this.bukuMap.values()));
