@@ -2,6 +2,8 @@ package com.manajemen.perpustakaan.controller;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 import com.manajemen.perpustakaan.entity.Buku;
 import com.manajemen.perpustakaan.entity.EksemplarBuku;
@@ -14,9 +16,9 @@ import com.manajemen.perpustakaan.view.UpdateBukuView;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
 public class BukuController {
-  private final BukuView indexView;
-  private final TambahBukuView addView;
-  private final UpdateBukuView editView;
+  public final BukuView indexView;
+  public final TambahBukuView addView;
+  public final UpdateBukuView editView;
 
   private final BukuRepository bukuRepo;
   private final EksemplarBukuRepository eksemplarBukuRepo;
@@ -42,7 +44,7 @@ public class BukuController {
 
       @Override
       public void onDelete(String id) {
-        System.out.println("Delete action triggered for id: " + id);
+        BukuController.this.destroy(id);
       }
     });
 
@@ -62,13 +64,120 @@ public class BukuController {
       addButton.removeActionListener(actionListener);
     }
 
-    addButton.addActionListener((_) -> add());
+    addButton.addActionListener((_) -> this.create());
   }
 
-  public void add() {
+  public void create() {
     this.addView.setVisible(true);
+
+    javax.swing.JButton submitButton = this.addView.getSubmitButton();
+
+    for (java.awt.event.ActionListener actionListener : submitButton.getActionListeners()) {
+      submitButton.removeActionListener(actionListener);
+    }
+
+    submitButton.addActionListener((_) -> this.store());
+
+    for (java.awt.event.WindowListener windowListener : this.addView.getWindowListeners()) {
+      this.addView.removeWindowListener(windowListener);
+    }
+
+    this.addView.addWindowListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosed(java.awt.event.WindowEvent e) {
+        BukuController.this.addView.resetForm();
+      }
+    });
   }
 
+  private void store() {
+    try {
+      Map<String, String> formData = this.addView.getFormData();
+
+      String isbn = formData.get("isbn");
+      String judul = formData.get("judul");
+      String penulis = formData.get("penulis");
+      String penerbit = formData.get("penerbit");
+
+      Buku existingBuku = this.bukuRepo.getByIsbn(isbn);
+
+      if (judul.isBlank() || isbn.isBlank() || penulis.isBlank() || penerbit.isBlank()) {
+        throw new Exception("Semua field harus diisi.");
+      }
+
+      if (existingBuku != null) {
+        throw new Exception("ISBN sudah terdaftar.");
+      }
+
+      Buku newBuku = new Buku(
+          formData.get("judul"),
+          formData.get("isbn"),
+          formData.get("penulis"),
+          formData.get("penerbit"),
+          Integer.parseInt(formData.get("jumlahHalaman")));
+
+      this.bukuRepo.add(newBuku);
+      this.addView.dispose();
+      this.refreshData();
+
+      JOptionPane.showMessageDialog(
+          this.addView,
+          "Buku berhasil ditambahkan!",
+          "Success",
+          JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(
+          this.addView,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  private void destroy(String id) {
+    int confirmation = JOptionPane.showConfirmDialog(
+        this.indexView,
+        "Apakah Anda yakin ingin menghapus buku ini?",
+        "Konfirmasi Hapus",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirmation != JOptionPane.YES_OPTION) {
+      return;
+    }
+
+    try {
+      Buku buku = this.bukuRepo.getByIsbn(id);
+
+      if (buku == null) {
+        throw new Exception("Buku tidak ditemukan.");
+      }
+
+      List<EksemplarBuku> eksemplars = this.eksemplarBukuRepo
+          .getByIsbn(buku.getIsbn())
+          .stream()
+          .filter((eksemplar) -> eksemplar.getStatus().equals(StatusEksemplar.DIPINJAM))
+          .toList();
+
+      if (!eksemplars.isEmpty()) {
+        throw new Exception("Buku tidak dapat dihapus karena ada eksemplar yang sedang dipinjam.");
+      }
+
+      this.bukuRepo.delete(buku);
+      this.refreshData();
+
+      JOptionPane.showMessageDialog(
+          this.indexView,
+          "Buku berhasil dihapus!",
+          "Success",
+          JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(
+          this.indexView,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
 
   // utils
 

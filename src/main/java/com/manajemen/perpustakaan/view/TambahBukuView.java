@@ -4,6 +4,8 @@
  */
 package com.manajemen.perpustakaan.view;
 
+import java.util.Map;
+
 /**
  *
  * @author farid
@@ -122,11 +124,10 @@ public class TambahBukuView extends javax.swing.JFrame {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setText("ISBN : ");
 
-        txtIsbn.setEditable(false);
         txtIsbn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIsbnActionPerformed(evt);
@@ -134,6 +135,11 @@ public class TambahBukuView extends javax.swing.JFrame {
         });
 
         btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
+            }
+        });
 
         btnSimpan.setText("Simpan");
 
@@ -145,16 +151,11 @@ public class TambahBukuView extends javax.swing.JFrame {
 
         jLabel5.setText("Jumlah Halaman :");
 
-        txtJudul.setEditable(false);
         txtJudul.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtJudulActionPerformed(evt);
             }
         });
-
-        txtPenulis.setEditable(false);
-
-        txtPenerbit.setEditable(false);
 
         txtJumlahHalman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -263,6 +264,10 @@ public class TambahBukuView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahStatusActionPerformed
 
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        this.resetForm();
+    }//GEN-LAST:event_btnBatalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -313,4 +318,28 @@ public class TambahBukuView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.JButton getSubmitButton() {
+        return this.btnSimpan;
+    }
+
+    public void resetForm() {
+        this.txtIsbn.setText("");
+        this.txtJudul.setText("");
+        this.txtPenulis.setText("");
+        this.txtPenerbit.setText("");
+        this.txtJumlahHalman.setText("");
+    }
+
+    public Map<String, String> getFormData() {
+        Map<String, String> formData = Map.of(
+            "isbn", this.txtIsbn.getText(),
+            "judul", this.txtJudul.getText(),
+            "penulis", this.txtPenulis.getText(),
+            "penerbit", this.txtPenerbit.getText(),
+            "jumlahHalaman", this.txtJumlahHalman.getText()
+        );
+        
+        return formData;
+    }
 }

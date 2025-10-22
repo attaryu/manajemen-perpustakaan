@@ -71,7 +71,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel5" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
-                                          <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jLabel4" alignment="0" pref="206" max="32767" attributes="0"/>
                                           <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -84,16 +84,17 @@
                                       <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtPenulis" alignment="0" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <Component id="txtIsbn" alignment="0" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <Component id="txtJudul" alignment="0" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <Component id="txtPenerbit" alignment="0" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <Component id="txtJumlahHalman" min="-2" pref="563" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="txtPenulis" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtJudul" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPenerbit" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtJumlahHalman" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtIsbn" alignment="1" min="-2" pref="330" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="84" max="32767" attributes="0"/>
+                      <EmptySpace pref="187" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -130,7 +131,7 @@
                           <Component id="btnSimpan" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnBatal" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace pref="58" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
