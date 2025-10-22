@@ -4,10 +4,10 @@
  */
 package com.manajemen.perpustakaan.view;
 
+import com.manajemen.perpustakaan.view.column.IdGetter;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 import com.manajemen.perpustakaan.view.column.action.ActionColumnEditor;
 import com.manajemen.perpustakaan.view.column.action.ActionColumnRenderer;
-import com.manajemen.perpustakaan.view.column.action.IdGetter;
 
 /**
  *

@@ -1,4 +1,4 @@
-package com.manajemen.perpustakaan.view;
+package com.manajemen.perpustakaan.view.column.action;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -8,17 +8,20 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import com.manajemen.perpustakaan.view.column.IdGetter;
+
 public class ActionColumnEditor extends AbstractCellEditor implements TableCellEditor {
 
     private final ActionPanel panel;
-    private JTable table;
     private int row;
     private ActionCallback actionCallback;
+    private IdGetter idGetter;
 
     // --- KONSTRUKTOR DIMULAI ---
-    public ActionColumnEditor(ActionCallback actionCallback) {
+    public ActionColumnEditor(ActionCallback actionCallback, IdGetter idGetter) {
         panel = new ActionPanel();
         this.actionCallback = actionCallback;
+        this.idGetter = idGetter;
 
         // Listener untuk tombol Edit
         panel.cmdEdit.addActionListener(new ActionListener() {
@@ -26,7 +29,7 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
 
-                String id = getTransaksiId();
+                String id = ActionColumnEditor.this.getId();
 
                 if (ActionColumnEditor.this.actionCallback != null) {
                     ActionColumnEditor.this.actionCallback.onEdit(id);
@@ -40,7 +43,7 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
             public void actionPerformed(ActionEvent e) {
                 fireEditingStopped();
 
-                String id = getTransaksiId();
+                String id = ActionColumnEditor.this.getId();
 
                 if (ActionColumnEditor.this.actionCallback != null) {
                     ActionColumnEditor.this.actionCallback.onDelete(id);
@@ -49,8 +52,8 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
         }); // Listener Delete selesai
     }
 
-    private String getTransaksiId() {
-        return table.getValueAt(row, 8).toString();
+    public String getId() {
+        return this.idGetter.getId(this.row);
     }
 
     // Ini adalah metode yang Anda salah letakkan sebelumnya
@@ -70,10 +73,9 @@ public class ActionColumnEditor extends AbstractCellEditor implements TableCellE
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        this.table = table;
         this.row = row;
-
         panel.setBackground(table.getSelectionBackground());
+
         return panel;
     }
 

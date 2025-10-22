@@ -1,4 +1,4 @@
-package com.manajemen.perpustakaan.view;
+package com.manajemen.perpustakaan.view.column.action;
 
 import java.awt.FlowLayout;
 
