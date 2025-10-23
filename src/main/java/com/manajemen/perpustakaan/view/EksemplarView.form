@@ -227,9 +227,10 @@
                 <Component class="javax.swing.JTable" name="tblDaftarEksemplar">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="2" rowCount="4">
-                        <Column editable="true" title="Nomor Eksemplar" type="java.lang.String"/>
+                      <Table columnCount="3" rowCount="4">
+                        <Column editable="false" title="Nomor Eksemplar" type="java.lang.String"/>
                         <Column editable="false" title="Status" type="java.lang.String"/>
+                        <Column editable="true" title="Aksi" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -244,10 +245,15 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                       </TableColumnModel>
                     </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                      <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -263,14 +269,9 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtNomorEksemplarBaru" min="-2" pref="571" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="727" max="32767" attributes="0"/>
                           <Component id="btnTambahEksemplar" min="-2" pref="149" max="-2" attributes="0"/>
-                          <EmptySpace pref="16" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -278,24 +279,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtNomorEksemplarBaru" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnTambahEksemplar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btnTambahEksemplar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="14" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel6">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Nomor Eksemplar Baru"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtNomorEksemplarBaru">
-                </Component>
                 <Component class="javax.swing.JButton" name="btnTambahEksemplar">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Tambah Eksemplar"/>

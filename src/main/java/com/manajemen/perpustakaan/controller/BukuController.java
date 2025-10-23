@@ -64,6 +64,11 @@ public class BukuController {
       public void onDelete(String id) {
         BukuController.this.destroy(id);
       }
+
+      @Override
+      public void onView(String id) {
+        System.out.println("View buku dengan ID: " + id);
+      }
     });
 
     for (java.awt.event.WindowListener windowListener : this.indexView.getWindowListeners()) {

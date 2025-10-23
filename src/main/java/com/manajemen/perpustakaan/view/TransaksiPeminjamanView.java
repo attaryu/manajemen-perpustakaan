@@ -1,9 +1,12 @@
 package com.manajemen.perpustakaan.view;
 
-import com.manajemen.perpustakaan.view.column.action.ActionColumnEditor;
-import com.manajemen.perpustakaan.view.column.action.ActionColumnRenderer;
+import java.util.List;
+
 import com.manajemen.perpustakaan.view.column.IdGetter;
+import com.manajemen.perpustakaan.view.column.action.ActionButton;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
+import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnEditor;
+import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnRenderer;
 
 public class TransaksiPeminjamanView extends javax.swing.JFrame {
     private ActionCallback actionCallback;
@@ -15,17 +18,29 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
 
     private void setupTableColumns() {
         javax.swing.table.TableColumn aksiColumn = data_peminjaman.getColumnModel().getColumn(7);
-        aksiColumn.setCellRenderer(new ActionColumnRenderer());
 
-        if (actionCallback != null) {
+        List<ActionButton> actions = List.of(
+                new ActionButton.Builder().label("Edit").build(),
+                new ActionButton.Builder().label("Delete").build());
+
+        aksiColumn.setCellRenderer(new FlexibleActionColumnRenderer(actions));
+
+        if (this.actionCallback != null) {
+            actions.get(0).setCallback(this.actionCallback::onEdit);
+            actions.get(1).setCallback(this.actionCallback::onDelete);
+
             IdGetter idGetter = (row) -> {
                 Object idValue = data_peminjaman.getValueAt(row, 8);
 
                 return idValue != null ? idValue.toString() : null;
             };
 
-            aksiColumn.setCellEditor(new ActionColumnEditor(actionCallback, idGetter));
+            aksiColumn.setCellEditor(new FlexibleActionColumnEditor(actions, idGetter));
         }
+
+        aksiColumn.setPreferredWidth(actions.size() * 70);
+
+        this.setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")

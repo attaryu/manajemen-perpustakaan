@@ -47,8 +47,6 @@ public class EksemplarView extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDaftarEksemplar = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        txtNomorEksemplarBaru = new javax.swing.JTextField();
         btnTambahEksemplar = new javax.swing.JButton();
 
         jLabel2.setText("ISBN : ");
@@ -161,20 +159,20 @@ public class EksemplarView extends javax.swing.JFrame {
 
         tblDaftarEksemplar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Nomor Eksemplar", "Status"
+                "Nomor Eksemplar", "Status", "Aksi"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -185,15 +183,15 @@ public class EksemplarView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblDaftarEksemplar.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(tblDaftarEksemplar);
         if (tblDaftarEksemplar.getColumnModel().getColumnCount() > 0) {
             tblDaftarEksemplar.getColumnModel().getColumn(0).setResizable(false);
             tblDaftarEksemplar.getColumnModel().getColumn(1).setResizable(false);
+            tblDaftarEksemplar.getColumnModel().getColumn(2).setResizable(false);
         }
 
         jPanel2.add(jScrollPane5, java.awt.BorderLayout.CENTER);
-
-        jLabel6.setText("Nomor Eksemplar Baru");
 
         btnTambahEksemplar.setText("Tambah Eksemplar");
 
@@ -201,23 +199,15 @@ public class EksemplarView extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNomorEksemplarBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTambahEksemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 727, Short.MAX_VALUE)
+                .addComponent(btnTambahEksemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtNomorEksemplarBaru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTambahEksemplar))
+                .addComponent(btnTambahEksemplar)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -291,7 +281,6 @@ public class EksemplarView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -301,7 +290,6 @@ public class EksemplarView extends javax.swing.JFrame {
     private javax.swing.JTextField txtIsbn;
     private javax.swing.JTextField txtJudul;
     private javax.swing.JTextField txtJumlahHalman;
-    private javax.swing.JTextField txtNomorEksemplarBaru;
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables

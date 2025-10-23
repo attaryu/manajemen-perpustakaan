@@ -7,9 +7,10 @@ package com.manajemen.perpustakaan.view;
 import java.util.List;
 
 import com.manajemen.perpustakaan.view.column.IdGetter;
+import com.manajemen.perpustakaan.view.column.action.ActionButton;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
-import com.manajemen.perpustakaan.view.column.action.ActionColumnEditor;
-import com.manajemen.perpustakaan.view.column.action.ActionColumnRenderer;
+import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnEditor;
+import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnRenderer;
 
 /**
  *
@@ -30,17 +31,29 @@ public class BukuView extends javax.swing.JFrame {
     private void setupTableColumns() {
         javax.swing.table.TableColumn aksiColumn = jTable1.getColumnModel()
                 .getColumn(7);
-        aksiColumn.setCellRenderer(new ActionColumnRenderer());
 
-        if (actionCallback != null) {
+        List<ActionButton> actions = List.of(
+                new ActionButton.Builder().label("Eksemplar").width(95).build(),
+                new ActionButton.Builder().label("Edit").build(),
+                new ActionButton.Builder().label("Delete").build());
+
+        aksiColumn.setCellRenderer(new FlexibleActionColumnRenderer(actions));
+
+        if (this.actionCallback != null) {
+            actions.get(0).setCallback(this.actionCallback::onView);
+            actions.get(1).setCallback(this.actionCallback::onEdit);
+            actions.get(2).setCallback(this.actionCallback::onDelete);
+
             IdGetter idGetter = (row) -> {
                 Object idValue = jTable1.getValueAt(row, 1);
 
                 return idValue != null ? idValue.toString() : null;
             };
 
-            aksiColumn.setCellEditor(new ActionColumnEditor(actionCallback, idGetter));
+            aksiColumn.setCellEditor(new FlexibleActionColumnEditor(actions, idGetter));
         }
+
+        aksiColumn.setPreferredWidth(actions.size() * 85);
 
         this.setLocationRelativeTo(null);
     }
@@ -52,7 +65,8 @@ public class BukuView extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jTextField3 = new javax.swing.JTextField();
@@ -67,8 +81,14 @@ public class BukuView extends javax.swing.JFrame {
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
         });
         jScrollPane4.setViewportView(jList1);
 
@@ -77,19 +97,18 @@ public class BukuView extends javax.swing.JFrame {
         btnTambahBukuBaru.setText("Tambah buku");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "Buku", "ISBN", "Penulis", "Penerbit", "Terpinjam", "Tersedia", "Total", "Aksi"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                },
+                new String[] {
+                        "Buku", "ISBN", "Penulis", "Penerbit", "Terpinjam", "Tersedia", "Total", "Aksi"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         jTable1.setRowHeight(30);
@@ -110,30 +129,35 @@ public class BukuView extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTambahBukuBaru))
-                        .addGap(0, 84, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jScrollPane2,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 908,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(btnTambahBukuBaru))
+                                                .addGap(0, 84, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 217,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        Short.MAX_VALUE)))));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTambahBukuBaru)
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTambahBukuBaru)
+                                .addContainerGap(27, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
