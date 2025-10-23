@@ -7,15 +7,22 @@ package com.manajemen.perpustakaan.view;
 import java.util.Map;
 
 /**
- *
+ * Form view untuk mengupdate/edit data buku yang sudah ada.
+ * View ini menyediakan form input untuk mengedit informasi buku
+ * yang sudah tersimpan di sistem perpustakaan.
+ * 
  * @author farid
+ * @version 1.0
+ * @since 2024
  */
 public class UpdateBukuView extends javax.swing.JFrame {
     
+    /** Logger untuk logging aktivitas dalam view */
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UpdateBukuView.class.getName());
 
     /**
-     * Creates new form EditBuku
+     * Konstruktor untuk membuat form EditBuku.
+     * Menginisialisasi komponen GUI dan mengatur posisi form di tengah layar.
      */
     public UpdateBukuView() {
         initComponents();
@@ -228,6 +235,12 @@ public class UpdateBukuView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengisi form dengan data buku yang akan diedit.
+     * Method ini digunakan untuk populate form dengan data existing.
+     * 
+     * @param data Map berisi data buku dengan key: isbn, judul, penulis, penerbit, jumlahHalaman
+     */
     public void setForm(Map<String, String> data) {
         txtIsbn.setText(data.get("isbn"));
         txtJudul.setText(data.get("judul"));
@@ -236,6 +249,11 @@ public class UpdateBukuView extends javax.swing.JFrame {
         txtJumlahHalman.setText(data.get("jumlahHalaman"));
     }
 
+    /**
+     * Mengambil data form yang telah diinput/diedit oleh user.
+     * 
+     * @return Map berisi data buku hasil edit dengan key: isbn, judul, penulis, penerbit, jumlahHalaman
+     */
     public Map<String, String> getForm() {
         return Map.of(
             "isbn", txtIsbn.getText(),
@@ -246,6 +264,11 @@ public class UpdateBukuView extends javax.swing.JFrame {
         );
     }
 
+    /**
+     * Mengambil referensi tombol submit/simpan untuk menyimpan perubahan data buku.
+     * 
+     * @return JButton tombol simpan
+     */
     public javax.swing.JButton getSubmitButton() {
         return this.btnSimpan;
     }

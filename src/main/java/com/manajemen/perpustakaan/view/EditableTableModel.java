@@ -3,19 +3,42 @@ package com.manajemen.perpustakaan.view;
 
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Custom table model yang mendukung editing row tertentu.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class EditableTableModel extends DefaultTableModel {
-    private int editingRow = -1; // -1 berarti tidak ada baris yang diedit
+    /** Index row yang sedang diedit, -1 jika tidak ada */
+    private int editingRow = -1;
 
+    /**
+     * Konstruktor EditableTableModel.
+     * 
+     * @param data data table
+     * @param columnNames nama kolom table
+     */
     public EditableTableModel(Object[][] data, Object[] columnNames) {
         super(data, columnNames);
     }
 
-    // Metode untuk mengatur baris mana yang sedang diedit
+    /**
+     * Mengatur row mana yang sedang dalam mode editing.
+     * 
+     * @param rowIndex index row yang akan diedit
+     */
     public void setEditingRow(int rowIndex) {
         this.editingRow = rowIndex;
-        fireTableRowsUpdated(rowIndex, rowIndex); // Beri tahu tabel untuk menggambar ulang baris ini
+        fireTableRowsUpdated(rowIndex, rowIndex);
     }
 
+    /**
+     * Mendapatkan index row yang sedang diedit.
+     * 
+     * @return index row yang sedang diedit, -1 jika tidak ada
+     */
     public int getEditingRow() {
         return this.editingRow;
     }

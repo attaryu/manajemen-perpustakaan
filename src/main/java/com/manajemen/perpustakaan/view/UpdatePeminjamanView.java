@@ -12,20 +12,30 @@ import com.manajemen.perpustakaan.entity.enumeration.StatusPeminjaman;
 import com.manajemen.perpustakaan.utils.DateUtils;
 
 /**
- *
+ * Form view untuk mengupdate/edit transaksi peminjaman buku.
+ * View ini menyediakan form untuk mengedit data transaksi peminjaman
+ * seperti tanggal dan status peminjaman.
+ * 
  * @author Wina Rahmalia
+ * @version 1.0
+ * @since 2024
  */
 public class UpdatePeminjamanView extends javax.swing.JFrame {
 
+    /** List status peminjaman yang tersedia untuk dropdown */
     public final List<String> statuses = Arrays.asList(StatusPeminjaman.values())
             .stream()
             .map((status) -> status.toString())
             .toList();
+    
+    /** Logger untuk logging aktivitas dalam view */
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(UpdatePeminjamanView.class.getName());
 
     /**
-     * Creates new form ViewUpdateData
+     * Konstruktor untuk membuat form ViewUpdateData.
+     * Menginisialisasi komponen GUI, mengatur field menjadi non-editable
+     * untuk data mahasiswa dan buku, serta mengisi dropdown status.
      */
     public UpdatePeminjamanView() {
         initComponents();
@@ -273,10 +283,20 @@ public class UpdatePeminjamanView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengambil referensi tombol submit untuk menyimpan perubahan data peminjaman.
+     * 
+     * @return JButton tombol submit
+     */
     public javax.swing.JButton getSubmitButton() {
         return this.jButton2;
     }
 
+    /**
+     * Mengambil data form peminjaman yang telah diedit oleh user.
+     * 
+     * @return Map berisi data peminjaman dengan key: tanggalPinjam, tanggalJatuhTempo, tanggalKembali, status
+     */
     public Map<String, String> getFormData() {
         Map<String, String> data = Map.of(
                 "tanggalPinjam", DateUtils.toString(jDateChooser1.getDate()),
@@ -287,10 +307,19 @@ public class UpdatePeminjamanView extends javax.swing.JFrame {
         return data;
     }
 
+    /**
+     * Mengambil referensi dropdown/combobox untuk pemilihan status peminjaman.
+     * 
+     * @return JComboBox untuk memilih status peminjaman (DIPINJAM, DIKEMBALIKAN, TERLAMBAT)
+     */
     public javax.swing.JComboBox<String> getStatusDropdown() {
         return this.jComboBox1;
     }
 
+    /**
+     * Mereset/membersihkan semua field input form peminjaman.
+     * Mengosongkan semua text field, date chooser, dan mereset combobox status.
+     */
     public void resetForm() {
         this.jTextField1.setText("");
         this.jTextField2.setText("");
@@ -302,6 +331,12 @@ public class UpdatePeminjamanView extends javax.swing.JFrame {
         this.jDateChooser3.setDate(null);
     }
 
+    /**
+     * Mengisi form dengan data peminjaman yang akan diedit.
+     * Method ini digunakan untuk populate form dengan data existing.
+     * 
+     * @param data Map berisi data peminjaman dengan key: nama, nrp, prodi, buku, tanggalPinjam, tanggalJatuhTempo, tanggalKembali, status
+     */
     public void setData(Map<String, String> data) {
         this.jTextField1.setText(data.get("nama"));
         this.jTextField2.setText(data.get("nrp"));

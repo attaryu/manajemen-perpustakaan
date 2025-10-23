@@ -11,11 +11,20 @@ import java.util.Map;
 import com.manajemen.perpustakaan.utils.DateUtils;
 
 /**
- *
+ * Form view untuk menambah transaksi peminjaman buku baru.
+ * View ini menyediakan form input untuk mencatat peminjaman buku
+ * oleh mahasiswa.
+ * 
  * @author Wina Rahmalia
+ * @version 1.0
+ * @since 2024
  */
 public class TambahPeminjamanView extends javax.swing.JFrame {
 
+        /**
+         * Konstruktor untuk membuat form TambahPeminjaman baru.
+         * Menginisialisasi komponen GUI dan mengatur posisi form di tengah layar.
+         */
         public TambahPeminjamanView() {
                 initComponents();
 
@@ -215,18 +224,38 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
+        /**
+         * Mengambil referensi dropdown/combobox untuk pemilihan buku.
+         * 
+         * @return JComboBox untuk memilih buku yang akan dipinjam
+         */
         public javax.swing.JComboBox<String> getBukuDropdown() {
                 return this.jComboBox2;
         }
 
+        /**
+         * Mengambil referensi dropdown/combobox untuk pemilihan eksemplar buku.
+         * 
+         * @return JComboBox untuk memilih eksemplar buku spesifik yang akan dipinjam
+         */
         public javax.swing.JComboBox<String> getEksemplarDropdown() {
                 return this.jComboBox1;
         }
 
+        /**
+         * Mengambil referensi tombol submit untuk menyimpan data peminjaman.
+         * 
+         * @return JButton tombol submit
+         */
         public javax.swing.JButton getSubmitButton() {
                 return this.jButton3;
         }
 
+        /**
+         * Mengambil data form peminjaman yang telah diinput oleh user.
+         * 
+         * @return Map berisi data peminjaman dengan key: nama, nrp, prodi, tanggalJatuhTempo, buku, eksemplar
+         */
         public Map<String, String> getFormData() {
                 Map<String, String> formData = new HashMap<>();
 
@@ -244,6 +273,10 @@ public class TambahPeminjamanView extends javax.swing.JFrame {
                 return formData;
         }
 
+        /**
+         * Mereset/membersihkan semua field input form peminjaman.
+         * Mengosongkan semua text field, date chooser, dan mengembalikan combobox ke index 0.
+         */
         public void resetForm() {
                 this.jTextField1.setText("");
                 this.jTextField2.setText("");

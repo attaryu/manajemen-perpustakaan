@@ -13,16 +13,26 @@ import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnEditor;
 import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnRenderer;
 
 /**
- *
+ * Form view untuk mengelola eksemplar buku.
+ * View ini menampilkan daftar eksemplar dari sebuah buku
+ * dan menyediakan fungsi untuk menambah atau menghapus eksemplar.
+ * 
  * @author farid
+ * @version 1.0
+ * @since 2024
  */
 public class EksemplarView extends javax.swing.JFrame {
+    /** Callback untuk handling aksi pada tabel eksemplar */
     private ActionCallback actionCallback;
+    
+    /** Logger untuk logging aktivitas dalam view */
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(EksemplarView.class.getName());
 
     /**
-     * Creates new form TambahEksemplar
+     * Konstruktor untuk membuat form TambahEksemplar.
+     * Menginisialisasi komponen GUI, setup tabel dengan action column,
+     * dan mengatur posisi form di tengah layar.
      */
     public EksemplarView() {
         initComponents();
@@ -334,16 +344,35 @@ public class EksemplarView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengisi tabel dengan data eksemplar buku.
+     * Method ini akan menghapus semua data yang ada di tabel
+     * dan menggantinya dengan data baru.
+     * 
+     * @param data List array Object berisi data eksemplar untuk ditampilkan di tabel
+     */
     public void setTableData(List<Object[]> data) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblDaftarEksemplar.getModel();
         model.setRowCount(0);
         data.forEach(model::addRow);
     }
 
+    /**
+     * Mengambil referensi tombol tambah eksemplar.
+     * 
+     * @return JButton tombol untuk menambah eksemplar baru
+     */
     public javax.swing.JButton getAddEksemplarButton() {
         return btnTambahEksemplar;
     }
 
+    /**
+     * Mengatur callback untuk handling aksi pada tabel eksemplar.
+     * Setelah callback diatur, method ini akan memanggil setupTableColumns()
+     * untuk mengupdate action column dengan callback yang baru.
+     * 
+     * @param actionCallback Implementasi ActionCallback untuk handling aksi delete eksemplar
+     */
     public void setActionCallback(ActionCallback actionCallback) {
         this.actionCallback = actionCallback;
         this.setupTableColumns();

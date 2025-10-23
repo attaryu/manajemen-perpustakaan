@@ -5,11 +5,24 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Table cell renderer untuk kolom action yang fleksibel.
+ * Menampilkan action buttons pada cell table.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class FlexibleActionColumnRenderer implements TableCellRenderer {
     
     private final FlexibleActionPanel panel;
     private final JPanel emptyPanel;
     
+    /**
+     * Konstruktor FlexibleActionColumnRenderer.
+     * 
+     * @param actions list action button yang akan ditampilkan
+     */
     public FlexibleActionColumnRenderer(List<ActionButton> actions) {
         this.panel = new FlexibleActionPanel(actions);
         this.emptyPanel = new JPanel();

@@ -7,15 +7,22 @@ package com.manajemen.perpustakaan.view;
 import java.util.Map;
 
 /**
- *
+ * Form view untuk menambah data buku baru.
+ * View ini menyediakan form input untuk menambahkan buku baru
+ * ke dalam sistem perpustakaan.
+ * 
  * @author farid
+ * @version 1.0
+ * @since 2024
  */
 public class TambahBukuView extends javax.swing.JFrame {
     
+    /** Logger untuk logging aktivitas dalam view */
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TambahBukuView.class.getName());
 
     /**
-     * Creates new form TambahBuku
+     * Konstruktor untuk membuat form TambahBuku baru.
+     * Menginisialisasi komponen GUI dan mengatur posisi form di tengah layar.
      */
     public TambahBukuView() {
         initComponents();
@@ -320,10 +327,19 @@ public class TambahBukuView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengambil referensi tombol submit/simpan.
+     * 
+     * @return JButton tombol simpan untuk menyimpan data buku
+     */
     public javax.swing.JButton getSubmitButton() {
         return this.btnSimpan;
     }
 
+    /**
+     * Mereset/membersihkan semua field input form.
+     * Mengosongkan semua text field pada form buku.
+     */
     public void resetForm() {
         this.txtIsbn.setText("");
         this.txtJudul.setText("");
@@ -332,6 +348,11 @@ public class TambahBukuView extends javax.swing.JFrame {
         this.txtJumlahHalman.setText("");
     }
 
+    /**
+     * Mengambil data form yang telah diinput oleh user.
+     * 
+     * @return Map berisi data buku dengan key: isbn, judul, penulis, penerbit, jumlahHalaman
+     */
     public Map<String, String> getFormData() {
         Map<String, String> formData = Map.of(
             "isbn", this.txtIsbn.getText(),

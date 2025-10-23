@@ -9,6 +9,14 @@ import javax.swing.table.TableCellEditor;
 
 import com.manajemen.perpustakaan.view.column.IdGetter;
 
+/**
+ * Table cell editor untuk kolom action yang fleksibel.
+ * Menampilkan action buttons yang dapat dikonfigurasi pada cell table.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class FlexibleActionColumnEditor extends AbstractCellEditor implements TableCellEditor {
 
   private final List<ActionButton> actions;
@@ -17,6 +25,12 @@ public class FlexibleActionColumnEditor extends AbstractCellEditor implements Ta
   private int currentRow;
   private IdGetter idGetter;
 
+  /**
+   * Konstruktor FlexibleActionColumnEditor.
+   * 
+   * @param actions list action button yang akan ditampilkan
+   * @param idGetter getter untuk mendapatkan ID dari row
+   */
   public FlexibleActionColumnEditor(List<ActionButton> actions, IdGetter idGetter) {
     this.actions = actions;
     this.idGetter = idGetter;

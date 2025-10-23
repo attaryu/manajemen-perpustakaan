@@ -5,8 +5,12 @@
 package com.manajemen.perpustakaan;
 
 /**
- *
+ * Main view untuk menu utama aplikasi manajemen perpustakaan.
+ * Menyediakan navigasi ke modul transaksi peminjaman dan manajemen buku.
+ * 
  * @author Wina Rahmalia
+ * @version 1.0
+ * @since 2025-10-08
  */
 public class MainView extends javax.swing.JFrame {
     

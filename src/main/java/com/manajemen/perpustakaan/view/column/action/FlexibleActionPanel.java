@@ -5,11 +5,23 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Panel yang berisi action buttons untuk ditampilkan dalam table cell.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class FlexibleActionPanel extends JPanel {
     
     private List<JButton> buttons;
     private String currentId;
     
+    /**
+     * Konstruktor FlexibleActionPanel.
+     * 
+     * @param actions list action button yang akan ditampilkan dalam panel
+     */
     public FlexibleActionPanel(List<ActionButton> actions) {
         this.buttons = new ArrayList<>();
         
@@ -51,10 +63,20 @@ public class FlexibleActionPanel extends JPanel {
         return button;
     }
     
+    /**
+     * Mengatur ID saat ini untuk row yang sedang ditampilkan.
+     * 
+     * @param id ID record
+     */
     public void setCurrentId(String id) {
         this.currentId = id;
     }
     
+    /**
+     * Mendapatkan ID saat ini.
+     * 
+     * @return ID record saat ini
+     */
     public String getCurrentId() {
         return currentId;
     }

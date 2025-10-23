@@ -8,9 +8,21 @@ import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnEditor;
 import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnRenderer;
 
+/**
+ * View untuk menampilkan daftar transaksi peminjaman.
+ * Menyediakan fitur pencarian, tambah, edit, dan delete transaksi.
+ * 
+ * @author Wina Rahmalia
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class TransaksiPeminjamanView extends javax.swing.JFrame {
+    /** Callback untuk action pada table */
     private ActionCallback actionCallback;
 
+    /**
+     * Konstruktor TransaksiPeminjamanView.
+     */
     public TransaksiPeminjamanView() {
         this.initComponents();
         this.setupTableColumns();
@@ -212,22 +224,49 @@ public class TransaksiPeminjamanView extends javax.swing.JFrame {
     private javax.swing.JTextField txt_pencarian;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengambil referensi tabel transaksi peminjaman.
+     * 
+     * @return JTable tabel yang menampilkan daftar transaksi peminjaman
+     */
     public javax.swing.JTable getTable() {
         return this.data_peminjaman;
     }
 
+    /**
+     * Mengambil model tabel transaksi peminjaman.
+     * 
+     * @return TableModel model data dari tabel peminjaman
+     */
     public javax.swing.table.TableModel getTableModel() {
         return this.data_peminjaman.getModel();
     }
 
+    /**
+     * Mengambil referensi text field untuk pencarian transaksi peminjaman.
+     * 
+     * @return JTextField field pencarian transaksi
+     */
     public javax.swing.JTextField getSearchBar() {
         return this.txt_pencarian;
     }
 
+    /**
+     * Mengambil referensi tombol untuk menambah transaksi peminjaman baru.
+     * 
+     * @return JButton tombol tambah peminjaman
+     */
     public javax.swing.JButton getTambahButton() {
         return this.btn_tambah;
     }
 
+    /**
+     * Mengatur callback untuk handling aksi pada tabel transaksi peminjaman.
+     * Setelah callback diatur, method ini akan memanggil setupTableColumns()
+     * untuk mengupdate action column dengan callback yang baru.
+     * 
+     * @param callback Implementasi ActionCallback untuk handling aksi pada transaksi (edit, delete)
+     */
     public void setActionCallback(ActionCallback callback) {
         this.actionCallback = callback;
         setupTableColumns();

@@ -13,10 +13,15 @@ import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnEditor;
 import com.manajemen.perpustakaan.view.column.action.FlexibleActionColumnRenderer;
 
 /**
- *
+ * View untuk menampilkan daftar buku.
+ * Menyediakan fitur pencarian, tambah, edit, delete, dan view eksemplar.
+ * 
  * @author farid
+ * @version 1.0
+ * @since 2025-10-08
  */
 public class BukuView extends javax.swing.JFrame {
+    /** Callback untuk action pada table */
     private ActionCallback actionCallback;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BukuView.class.getName());
 
@@ -201,21 +206,45 @@ public class BukuView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Mengatur callback untuk handling aksi pada tabel buku.
+     * Setelah callback diatur, method ini akan memanggil setupTableColumns()
+     * untuk mengupdate action column dengan callback yang baru.
+     * 
+     * @param actionCallback Implementasi ActionCallback untuk handling aksi pada buku (view eksemplar, edit, delete)
+     */
     public void setActionCallback(ActionCallback actionCallback) {
         this.actionCallback = actionCallback;
         setupTableColumns();
     }
 
+    /**
+     * Mengisi tabel dengan data buku.
+     * Method ini akan menghapus semua data yang ada di tabel
+     * dan menggantinya dengan data baru.
+     * 
+     * @param data List array Object berisi data buku untuk ditampilkan di tabel
+     */
     public void setTableData(List<Object[]> data) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         data.forEach(model::addRow);
     }
 
+    /**
+     * Mengambil referensi text field untuk pencarian buku.
+     * 
+     * @return JTextField field pencarian buku
+     */
     public javax.swing.JTextField getSearchField() {
         return this.jTextField1;
     }
 
+    /**
+     * Mengambil referensi tombol untuk menambah buku baru.
+     * 
+     * @return JButton tombol tambah buku baru
+     */
     public javax.swing.JButton getAddButton() {
         return this.btnTambahBukuBaru;
     }
