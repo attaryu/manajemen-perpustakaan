@@ -19,10 +19,10 @@ import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
 import com.manajemen.perpustakaan.utils.DateUtils;
-import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
 import com.manajemen.perpustakaan.view.UpdatePeminjamanView;
+import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
 public class TransaksiPeminjamanController {
     public final TransaksiPeminjamanView indexView;
@@ -34,10 +34,12 @@ public class TransaksiPeminjamanController {
     private final EksemplarBukuRepository eksemplarBukuRepo;
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
+    private Runnable navigateToMain;
+
     public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView,
             UpdatePeminjamanView editView, BukuRepository bukuRepo,
             MahasiswaRepository mahasiswaRepo, EksemplarBukuRepository eksemplarBukuRepo,
-            TransaksiPeminjamanRepository transaksiPeminjamanRepo) {
+            TransaksiPeminjamanRepository transaksiPeminjamanRepo, Runnable navigateToMain) {
         this.bukuRepo = bukuRepo;
         this.mahasiswaRepo = mahasiswaRepo;
         this.eksemplarBukuRepo = eksemplarBukuRepo;
@@ -47,11 +49,30 @@ public class TransaksiPeminjamanController {
         this.addView = addView;
         this.editView = editView;
 
-        this.index(this.convertToTableRow(""));
+        this.navigateToMain = navigateToMain;
+    }
+
+    // main method
+
+    public void index() {
+        this.refreshData();
+
+        for (java.awt.event.ActionListener listener : this.indexView.getSearchBar().getActionListeners()) {
+            this.indexView.getSearchBar().removeActionListener(listener);
+        }
 
         this.indexView.getSearchBar().addActionListener((_) -> this.refreshData());
 
+        for (java.awt.event.ActionListener listener : this.indexView.getTambahButton().getActionListeners()) {
+            this.indexView.getTambahButton().removeActionListener(listener);
+        }
+
         this.indexView.getTambahButton().addActionListener((_) -> this.create());
+
+        for (java.awt.event.ActionListener listener : this.addView.getSubmitButton().getActionListeners()) {
+            this.addView.getSubmitButton().removeActionListener(listener);
+        }
+
         this.addView.getSubmitButton().addActionListener((_) -> this.store());
 
         this.indexView.setActionCallback(new ActionCallback() {
@@ -65,14 +86,19 @@ public class TransaksiPeminjamanController {
                 TransaksiPeminjamanController.this.destroy(id);
             }
         });
-    }
 
-    // main method
+        for (java.awt.event.WindowListener listener : this.indexView.getWindowListeners()) {
+            this.indexView.removeWindowListener(listener);
+        }
 
-    private void index(List<Object[]> data) {
-        DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
-        viewTabelModel.setRowCount(0);
-        data.forEach(viewTabelModel::addRow);
+        this.indexView.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                TransaksiPeminjamanController.this.navigateToMain.run();
+            }
+        });
+
+        this.indexView.setVisible(true);
     }
 
     private void create() {
@@ -387,7 +413,13 @@ public class TransaksiPeminjamanController {
     }
 
     private void refreshData() {
+        DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
+        
+        viewTabelModel.setRowCount(0);
+        
         String currentSearch = this.indexView.getSearchBar().getText();
-        this.index(this.convertToTableRow(currentSearch));
+        List<Object[]> data = this.convertToTableRow(currentSearch);
+
+        data.forEach(viewTabelModel::addRow);
     }
 }

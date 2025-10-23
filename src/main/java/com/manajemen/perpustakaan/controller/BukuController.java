@@ -23,31 +23,20 @@ public class BukuController {
   private final BukuRepository bukuRepo;
   private final EksemplarBukuRepository eksemplarBukuRepo;
 
+  private Runnable navigateToMain;
+
   public BukuController(BukuRepository bukuRepo, EksemplarBukuRepository eksemplarBukuRepo, BukuView indexView,
       TambahBukuView addView,
-      UpdateBukuView editView) {
+      UpdateBukuView editView, Runnable navigateToMain) {
     this.bukuRepo = bukuRepo;
     this.eksemplarBukuRepo = eksemplarBukuRepo;
     this.indexView = indexView;
     this.addView = addView;
     this.editView = editView;
-
-    this.index();
+    this.navigateToMain = navigateToMain;
   }
 
   public void index() {
-    this.indexView.setActionCallback(new ActionCallback() {
-      @Override
-      public void onEdit(String id) {
-        BukuController.this.edit(id);
-      }
-
-      @Override
-      public void onDelete(String id) {
-        BukuController.this.destroy(id);
-      }
-    });
-
     this.refreshData();
 
     javax.swing.JTextField searchField = this.indexView.getSearchField();
@@ -65,6 +54,30 @@ public class BukuController {
     }
 
     addButton.addActionListener((_) -> this.create());
+    this.indexView.setActionCallback(new ActionCallback() {
+      @Override
+      public void onEdit(String id) {
+        BukuController.this.edit(id);
+      }
+
+      @Override
+      public void onDelete(String id) {
+        BukuController.this.destroy(id);
+      }
+    });
+
+    for (java.awt.event.WindowListener windowListener : this.indexView.getWindowListeners()) {
+      this.indexView.removeWindowListener(windowListener);
+    }
+
+    this.indexView.addWindowListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosed(java.awt.event.WindowEvent e) {
+        BukuController.this.navigateToMain.run();
+      }
+    });
+
+    this.indexView.setVisible(true);
   }
 
   public void create() {
