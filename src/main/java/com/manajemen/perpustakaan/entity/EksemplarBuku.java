@@ -21,6 +21,11 @@ public class EksemplarBuku {
         this.status = status;
     }
 
+    public static EksemplarBuku create(Buku detailBuku) {
+        String nomorEksemplar = java.util.UUID.randomUUID().toString();
+        return new EksemplarBuku(nomorEksemplar, detailBuku, StatusEksemplar.TERSEDIA);
+    }
+
     public String getNomorEksemplar() {
         return this.nomorEksemplar;
     }

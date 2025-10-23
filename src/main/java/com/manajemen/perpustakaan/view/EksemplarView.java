@@ -301,4 +301,8 @@ public class EksemplarView extends javax.swing.JFrame {
         model.setRowCount(0);
         data.forEach(model::addRow);
     }
+
+    public javax.swing.JButton getAddEksemplarButton() {
+        return btnTambahEksemplar;
+    }
 }

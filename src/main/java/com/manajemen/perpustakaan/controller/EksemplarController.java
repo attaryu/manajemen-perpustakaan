@@ -1,10 +1,12 @@
 package com.manajemen.perpustakaan.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import com.manajemen.perpustakaan.entity.Buku;
+import com.manajemen.perpustakaan.entity.EksemplarBuku;
 import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.view.EksemplarView;
@@ -47,6 +49,14 @@ public class EksemplarController {
           EksemplarController.this.navigateToBuku.run();
         }
       });
+
+      javax.swing.JButton addEksemplarButton = this.view.getAddEksemplarButton();
+
+      for (java.awt.event.ActionListener al : addEksemplarButton.getActionListeners()) {
+        addEksemplarButton.removeActionListener(al);
+      }
+
+      addEksemplarButton.addActionListener((_) -> this.store(buku));
     } catch (Exception e) {
       e.printStackTrace();
       JOptionPane.showMessageDialog(
@@ -56,6 +66,35 @@ public class EksemplarController {
           JOptionPane.ERROR_MESSAGE);
 
       this.view.dispose();
+    }
+  }
+
+  public void store(Buku buku) {
+    String totalInString = JOptionPane.showInputDialog(
+        this.view,
+        "Masukkan jumlah eksemplar yang akan ditambahkan:",
+        "Tambah Eksemplar",
+        JOptionPane.PLAIN_MESSAGE);
+
+    if (totalInString == null) {
+      return;
+    }
+
+    try {
+      int total = Integer.parseInt(totalInString);
+
+      List<EksemplarBuku> newEksemplars = new ArrayList<>();
+
+      for (int i = 0; i < total; i++) {
+        EksemplarBuku eksemplar = EksemplarBuku.create(buku);
+        newEksemplars.add(eksemplar);
+      }
+
+      this.eksemplarBukuRepo.putMany(newEksemplars);
+
+      this.refreshData(buku);
+    } catch (Exception e) {
+
     }
   }
 
