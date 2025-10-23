@@ -10,6 +10,7 @@ import com.manajemen.perpustakaan.entity.EksemplarBuku;
 import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.view.EksemplarView;
+import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
 public class EksemplarController {
   private EksemplarView view;
@@ -57,6 +58,13 @@ public class EksemplarController {
       }
 
       addEksemplarButton.addActionListener((_) -> this.store(buku));
+
+      this.view.setActionCallback(new ActionCallback() {
+        @Override
+        public void onDelete(String nomorEksemplar) {
+          EksemplarController.this.destroy(nomorEksemplar, buku);
+        }
+      });
     } catch (Exception e) {
       e.printStackTrace();
       JOptionPane.showMessageDialog(
@@ -95,6 +103,42 @@ public class EksemplarController {
       this.refreshData(buku);
     } catch (Exception e) {
 
+    }
+  }
+
+  public void destroy(String nomorEksemplar, Buku buku) {
+    int confirm = JOptionPane.showConfirmDialog(
+        this.view,
+        "Apakah Anda yakin ingin menghapus eksemplar ini?",
+        "Konfirmasi Hapus Eksemplar",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirm != JOptionPane.YES_OPTION) {
+      return;
+    }
+
+    try {
+      EksemplarBuku eksemplar = this.eksemplarBukuRepo.getByNomorEksemplar(nomorEksemplar);
+
+      if (!eksemplar.isAvailable()) {
+        throw new Exception("Eksemplar tidak dapat dihapus karena sedang dipinjam.");
+      }
+
+      this.eksemplarBukuRepo.delete(eksemplar);
+      this.refreshData(buku);
+
+      JOptionPane.showMessageDialog(
+          this.view,
+          "Eksemplar berhasil dihapus.",
+          "Sukses",
+          JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(
+          this.view,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
     }
   }
 

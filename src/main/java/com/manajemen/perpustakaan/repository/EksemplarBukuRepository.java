@@ -54,4 +54,9 @@ public class EksemplarBukuRepository {
         this.eksemplarBukuMap.put(eksemplarBuku.getNomorEksemplar(), eksemplarBuku);
         this.storage.put(new ArrayList<>(this.eksemplarBukuMap.values()));
     }
+
+    public void delete(EksemplarBuku eksemplarBuku) {
+        this.eksemplarBukuMap.remove(eksemplarBuku.getNomorEksemplar());
+        this.storage.put(new ArrayList<>(this.eksemplarBukuMap.values()));
+    }
 }
