@@ -1,5 +1,4 @@
-/data/mahasiswa.json
-/data/transaksi_peminjaman.json
+/data
 
 # Maven
 target/
