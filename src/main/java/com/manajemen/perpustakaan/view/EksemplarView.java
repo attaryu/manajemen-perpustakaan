@@ -17,6 +17,7 @@ public class EksemplarView extends javax.swing.JFrame {
      */
     public EksemplarView() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

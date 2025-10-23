@@ -41,6 +41,8 @@ public class BukuView extends javax.swing.JFrame {
 
             aksiColumn.setCellEditor(new ActionColumnEditor(actionCallback, idGetter));
         }
+
+        this.setLocationRelativeTo(null);
     }
 
     /**

@@ -19,6 +19,7 @@ public class TambahBukuView extends javax.swing.JFrame {
      */
     public TambahBukuView() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

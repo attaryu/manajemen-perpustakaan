@@ -19,6 +19,7 @@ public class UpdateBukuView extends javax.swing.JFrame {
      */
     public UpdateBukuView() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
