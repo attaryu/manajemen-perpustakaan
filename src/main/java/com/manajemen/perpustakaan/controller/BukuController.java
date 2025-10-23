@@ -3,6 +3,8 @@ package com.manajemen.perpustakaan.controller;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+
 import javax.swing.JOptionPane;
 
 import com.manajemen.perpustakaan.entity.Buku;
@@ -24,16 +26,18 @@ public class BukuController {
   private final EksemplarBukuRepository eksemplarBukuRepo;
 
   private Runnable navigateToMain;
+  private Consumer<String> navigateToEksemplar;
 
   public BukuController(BukuRepository bukuRepo, EksemplarBukuRepository eksemplarBukuRepo, BukuView indexView,
       TambahBukuView addView,
-      UpdateBukuView editView, Runnable navigateToMain) {
+      UpdateBukuView editView, Runnable navigateToMain, Consumer<String> navigateToEksemplar) {
     this.bukuRepo = bukuRepo;
     this.eksemplarBukuRepo = eksemplarBukuRepo;
     this.indexView = indexView;
     this.addView = addView;
     this.editView = editView;
     this.navigateToMain = navigateToMain;
+    this.navigateToEksemplar = navigateToEksemplar;
   }
 
   public void index() {
@@ -67,7 +71,7 @@ public class BukuController {
 
       @Override
       public void onView(String id) {
-        System.out.println("View buku dengan ID: " + id);
+        BukuController.this.navigateToEksemplar.accept(id);
       }
     });
 

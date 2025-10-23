@@ -3,12 +3,14 @@ package com.manajemen.perpustakaan;
 import javax.swing.JFrame;
 
 import com.manajemen.perpustakaan.controller.BukuController;
+import com.manajemen.perpustakaan.controller.EksemplarController;
 import com.manajemen.perpustakaan.controller.TransaksiPeminjamanController;
 import com.manajemen.perpustakaan.repository.BukuRepository;
 import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.repository.MahasiswaRepository;
 import com.manajemen.perpustakaan.repository.TransaksiPeminjamanRepository;
 import com.manajemen.perpustakaan.view.BukuView;
+import com.manajemen.perpustakaan.view.EksemplarView;
 import com.manajemen.perpustakaan.view.TambahBukuView;
 import com.manajemen.perpustakaan.view.TambahPeminjamanView;
 import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
@@ -24,6 +26,7 @@ public class MainController {
   // controller
   TransaksiPeminjamanController transaksiPeminjamanController;
   BukuController bukuController;
+  EksemplarController eksemplarController;
 
   // main view
   MainView mainView;
@@ -37,6 +40,9 @@ public class MainController {
   BukuView bukuView;
   TambahBukuView tambahBukuView;
   UpdateBukuView updateBukuView;
+
+  // eksemplar view
+  EksemplarView eksemplarView;
 
   public MainController() {
     this.initRepo();
@@ -61,8 +67,11 @@ public class MainController {
     this.tambahBukuView = new TambahBukuView();
     this.updateBukuView = new UpdateBukuView();
 
+    this.eksemplarView = new EksemplarView();
+
     this.transaksiPeminjamanView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     this.bukuView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    this.eksemplarView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   }
 
   private void initController() {
@@ -82,14 +91,20 @@ public class MainController {
         this.bukuView,
         this.tambahBukuView,
         this.updateBukuView,
-        this::navigateToMain);
+        this::navigateToMain,
+        this::navigateToEksemplar);
+
+    this.eksemplarController = new EksemplarController(
+        this.eksemplarView,
+        this.bukuRepo,
+        this.eksemplarBukuRepo,
+        this::navigateToBuku);
   }
 
   private void setupMainView() {
     this.mainView = new MainView();
 
     this.mainView.getTransaksiButton().addActionListener((_) -> this.navigateToTransaksi());
-
     this.mainView.getBukuButton().addActionListener((_) -> this.navigateToBuku());
   }
 
@@ -101,6 +116,11 @@ public class MainController {
   private void navigateToBuku() {
     this.hideAllViews();
     this.bukuController.index();
+  }
+
+  private void navigateToEksemplar(String isbn) {
+    this.hideAllViews();
+    this.eksemplarController.index(isbn);
   }
 
   private void navigateToMain() {

@@ -4,6 +4,8 @@
  */
 package com.manajemen.perpustakaan.view;
 
+import java.util.List;
+
 /**
  *
  * @author farid
@@ -293,4 +295,10 @@ public class EksemplarView extends javax.swing.JFrame {
     private javax.swing.JTextField txtPenerbit;
     private javax.swing.JTextField txtPenulis;
     // End of variables declaration//GEN-END:variables
+
+    public void setTableData(List<Object[]> data) {
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblDaftarEksemplar.getModel();
+        model.setRowCount(0);
+        data.forEach(model::addRow);
+    }
 }

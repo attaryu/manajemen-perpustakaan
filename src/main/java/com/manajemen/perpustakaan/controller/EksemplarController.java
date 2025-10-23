@@ -1,0 +1,75 @@
+package com.manajemen.perpustakaan.controller;
+
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import com.manajemen.perpustakaan.entity.Buku;
+import com.manajemen.perpustakaan.repository.BukuRepository;
+import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
+import com.manajemen.perpustakaan.view.EksemplarView;
+
+public class EksemplarController {
+  private EksemplarView view;
+
+  private EksemplarBukuRepository eksemplarBukuRepo;
+  private BukuRepository bukuRepo;
+
+  private Runnable navigateToBuku;
+
+  public EksemplarController(EksemplarView view, BukuRepository bukuRepo, EksemplarBukuRepository eksemplarBukuRepo,
+      Runnable navigateToBuku) {
+    this.view = view;
+    this.eksemplarBukuRepo = eksemplarBukuRepo;
+    this.bukuRepo = bukuRepo;
+    this.navigateToBuku = navigateToBuku;
+  }
+
+  public void index(String isbn) {
+    this.view.setVisible(true);
+
+    try {
+      Buku buku = this.bukuRepo.getByIsbn(isbn);
+
+      if (buku == null) {
+        throw new Exception("Buku tidak ditemukan.");
+      }
+
+      this.refreshData(buku);
+
+      for (java.awt.event.WindowListener wl : this.view.getWindowListeners()) {
+        this.view.removeWindowListener(wl);
+      }
+
+      this.view.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent e) {
+          EksemplarController.this.navigateToBuku.run();
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(
+          this.view,
+          e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+
+      this.view.dispose();
+    }
+  }
+
+  private void refreshData(Buku buku) {
+    List<Object[]> eksemplarList = this.eksemplarBukuRepo.getByIsbn(buku.getIsbn())
+        .stream()
+        .map((eksemplar) -> {
+          return new Object[] {
+              eksemplar.getNomorEksemplar(),
+              eksemplar.getStatus(),
+              null
+          };
+        }).toList();
+
+    this.view.setTableData(eksemplarList);
+  }
+}
