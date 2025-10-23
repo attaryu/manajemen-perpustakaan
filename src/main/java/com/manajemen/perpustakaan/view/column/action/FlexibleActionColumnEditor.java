@@ -11,22 +11,25 @@ import com.manajemen.perpustakaan.view.column.IdGetter;
 
 public class FlexibleActionColumnEditor extends AbstractCellEditor implements TableCellEditor {
 
-  private FlexibleActionPanel panel;
+  private final List<ActionButton> actions;
+  private FlexibleActionPanel currentPanel;
   private JTable table;
-  private int row;
+  private int currentRow;
   private IdGetter idGetter;
 
   public FlexibleActionColumnEditor(List<ActionButton> actions, IdGetter idGetter) {
-    this.panel = new FlexibleActionPanel(actions);
+    this.actions = actions;
     this.idGetter = idGetter;
+    this.currentRow = -1;
   }
 
-  private String getId() {
+  private String getCurrentId() {
     if (this.idGetter == null || this.table == null ||
-        this.row < 0 || this.row >= this.table.getRowCount()) {
+        this.currentRow < 0 || this.currentRow >= this.table.getRowCount()) {
       return null;
     }
-    return this.idGetter.getId(this.row);
+
+    return this.idGetter.getId(this.currentRow);
   }
 
   @Override
@@ -34,25 +37,44 @@ public class FlexibleActionColumnEditor extends AbstractCellEditor implements Ta
       boolean isSelected, int row, int column) {
 
     this.table = table;
-    this.row = row;
+    this.currentRow = row;
 
-    // Set current ID untuk panel
-    String id = getId();
-    panel.setCurrentId(id);
+    String currentId = getCurrentId();
+
+    List<ActionButton> wrappedActions = actions.stream()
+        .map(action -> {
+          return new ActionButton.Builder()
+              .label(action.getLabel())
+              .icon(action.getIcon())
+              .backgroundColor(action.getBackgroundColor())
+              .foregroundColor(action.getForegroundColor())
+              .callback((_) -> {
+                // currentId di-capture saat panel dibuat
+                if (currentId != null && action.getCallback() != null) {
+                  action.getCallback().accept(currentId);
+                }
+                fireEditingStopped();
+              })
+              .build();
+        })
+        .toList();
+
+    this.currentPanel = new FlexibleActionPanel(wrappedActions);
+    this.currentPanel.setCurrentId(currentId);
 
     // Set background
     if (isSelected) {
-      panel.setBackground(table.getSelectionBackground());
+      currentPanel.setBackground(table.getSelectionBackground());
     } else {
-      panel.setBackground(table.getBackground());
+      currentPanel.setBackground(table.getBackground());
     }
 
-    return panel;
+    return currentPanel;
   }
 
   @Override
   public Object getCellEditorValue() {
-    return panel.getCurrentId();
+    return currentPanel != null ? currentPanel.getCurrentId() : null;
   }
 
   @Override
