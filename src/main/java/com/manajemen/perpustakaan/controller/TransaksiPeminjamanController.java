@@ -24,18 +24,51 @@ import com.manajemen.perpustakaan.view.TransaksiPeminjamanView;
 import com.manajemen.perpustakaan.view.UpdatePeminjamanView;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
+/**
+ * Controller untuk mengelola operasi CRUD transaksi peminjaman buku.
+ * Menangani logika bisnis peminjaman, pengembalian, dan validasi status.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class TransaksiPeminjamanController {
+    /** View untuk menampilkan daftar transaksi peminjaman */
     public final TransaksiPeminjamanView indexView;
+    
+    /** View untuk menambah transaksi peminjaman baru */
     public final TambahPeminjamanView addView;
+    
+    /** View untuk mengupdate transaksi peminjaman */
     public final UpdatePeminjamanView editView;
 
+    /** Repository untuk operasi data buku */
     private final BukuRepository bukuRepo;
+    
+    /** Repository untuk operasi data mahasiswa */
     private final MahasiswaRepository mahasiswaRepo;
+    
+    /** Repository untuk operasi data eksemplar buku */
     private final EksemplarBukuRepository eksemplarBukuRepo;
+    
+    /** Repository untuk operasi data transaksi peminjaman */
     private final TransaksiPeminjamanRepository transaksiPeminjamanRepo;
 
+    /** Callback untuk navigasi ke halaman utama */
     private Runnable navigateToMain;
 
+    /**
+     * Konstruktor untuk TransaksiPeminjamanController.
+     * 
+     * @param indexView view daftar transaksi
+     * @param addView view tambah transaksi
+     * @param editView view update transaksi
+     * @param bukuRepo repository buku
+     * @param mahasiswaRepo repository mahasiswa
+     * @param eksemplarBukuRepo repository eksemplar buku
+     * @param transaksiPeminjamanRepo repository transaksi peminjaman
+     * @param navigateToMain callback navigasi ke main
+     */
     public TransaksiPeminjamanController(TransaksiPeminjamanView indexView, TambahPeminjamanView addView,
             UpdatePeminjamanView editView, BukuRepository bukuRepo,
             MahasiswaRepository mahasiswaRepo, EksemplarBukuRepository eksemplarBukuRepo,
@@ -54,6 +87,10 @@ public class TransaksiPeminjamanController {
 
     // main method
 
+    /**
+     * Menampilkan halaman index/daftar transaksi peminjaman.
+     * Setup event listener untuk pencarian, tambah, edit, dan delete.
+     */
     public void index() {
         this.refreshData();
 
@@ -101,6 +138,10 @@ public class TransaksiPeminjamanController {
         this.indexView.setVisible(true);
     }
 
+    /**
+     * Menampilkan form untuk menambah transaksi peminjaman baru.
+     * Setup dropdown buku dan eksemplar dengan validasi ketersediaan.
+     */
     private void create() {
         try {
             this.addView.setLocationRelativeTo(null);
@@ -169,6 +210,10 @@ public class TransaksiPeminjamanController {
         }
     }
 
+    /**
+     * Menyimpan transaksi peminjaman baru.
+     * Melakukan validasi dan membuat data mahasiswa baru jika belum terdaftar.
+     */
     private void store() {
         try {
             Map<String, String> formData = this.addView.getFormData();
@@ -224,6 +269,11 @@ public class TransaksiPeminjamanController {
         }
     }
 
+    /**
+     * Menampilkan form edit untuk transaksi peminjaman tertentu.
+     * 
+     * @param id ID transaksi yang akan diedit
+     */
     private void edit(String id) {
         this.editView.setVisible(true);
         this.editView.resetForm();
@@ -281,6 +331,11 @@ public class TransaksiPeminjamanController {
         }
     }
 
+    /**
+     * Mengupdate data transaksi peminjaman.
+     * 
+     * @param transaksi object transaksi yang akan diupdate
+     */
     private void update(TransaksiPeminjaman transaksi) {
         try {
             Map<String, String> formData = this.editView.getFormData();
@@ -310,6 +365,11 @@ public class TransaksiPeminjamanController {
         }
     }
 
+    /**
+     * Menghapus transaksi peminjaman dan mengembalikan status eksemplar.
+     * 
+     * @param id ID transaksi yang akan dihapus
+     */
     private void destroy(String id) {
         int deleteConfirm = JOptionPane.showConfirmDialog(this.indexView,
                 "Apakah Anda yakin ingin menghapus data peminjaman ini?",
@@ -349,6 +409,13 @@ public class TransaksiPeminjamanController {
 
     // utility
 
+    /**
+     * Mengkonversi data transaksi peminjaman menjadi format row tabel.
+     * Data diurutkan berdasarkan prioritas status dan tanggal pinjam.
+     * 
+     * @param search keyword pencarian untuk filter data
+     * @return list array object yang merepresentasikan row tabel
+     */
     private List<Object[]> convertToTableRow(String search) {
         String processedSearch = search.trim().toLowerCase();
 
@@ -399,6 +466,12 @@ public class TransaksiPeminjamanController {
                 .toList();
     }
 
+    /**
+     * Mendapatkan prioritas sorting untuk status peminjaman.
+     * 
+     * @param status status peminjaman
+     * @return nilai prioritas (semakin kecil semakin prioritas)
+     */
     private int getStatusPriority(StatusPeminjaman status) {
         switch (status) {
             case DIPINJAM:
@@ -414,6 +487,9 @@ public class TransaksiPeminjamanController {
         }
     }
 
+    /**
+     * Merefresh data tabel dengan data terbaru dari repository.
+     */
     private void refreshData() {
         DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
 

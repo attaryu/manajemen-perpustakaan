@@ -17,17 +17,47 @@ import com.manajemen.perpustakaan.view.TambahBukuView;
 import com.manajemen.perpustakaan.view.UpdateBukuView;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
+/**
+ * Controller untuk mengelola operasi CRUD buku dan koordinasi antar view buku.
+ * Menangani logika bisnis untuk manajemen data buku, validasi, dan navigasi.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class BukuController {
+  /** View untuk menampilkan daftar buku */
   public final BukuView indexView;
+  
+  /** View untuk menambah buku baru */
   public final TambahBukuView addView;
+  
+  /** View untuk mengupdate data buku */
   public final UpdateBukuView editView;
 
+  /** Repository untuk operasi data buku */
   private final BukuRepository bukuRepo;
+  
+  /** Repository untuk operasi data eksemplar buku */
   private final EksemplarBukuRepository eksemplarBukuRepo;
 
+  /** Callback untuk navigasi ke halaman utama */
   private Runnable navigateToMain;
+  
+  /** Callback untuk navigasi ke halaman eksemplar dengan parameter ISBN */
   private Consumer<String> navigateToEksemplar;
 
+  /**
+   * Konstruktor untuk BukuController.
+   * 
+   * @param bukuRepo repository buku
+   * @param eksemplarBukuRepo repository eksemplar buku
+   * @param indexView view daftar buku
+   * @param addView view tambah buku
+   * @param editView view update buku
+   * @param navigateToMain callback navigasi ke main
+   * @param navigateToEksemplar callback navigasi ke eksemplar
+   */
   public BukuController(BukuRepository bukuRepo, EksemplarBukuRepository eksemplarBukuRepo, BukuView indexView,
       TambahBukuView addView,
       UpdateBukuView editView, Runnable navigateToMain, Consumer<String> navigateToEksemplar) {
@@ -40,6 +70,10 @@ public class BukuController {
     this.navigateToEksemplar = navigateToEksemplar;
   }
 
+  /**
+   * Menampilkan halaman index/daftar buku.
+   * Melakukan setup event listener untuk pencarian, tambah, edit, delete, dan view.
+   */
   public void index() {
     this.refreshData();
 
@@ -89,6 +123,10 @@ public class BukuController {
     this.indexView.setVisible(true);
   }
 
+  /**
+   * Menampilkan form untuk menambah buku baru.
+   * Setup event listener untuk submit dan window close.
+   */
   public void create() {
     this.addView.setVisible(true);
 
@@ -112,6 +150,10 @@ public class BukuController {
     });
   }
 
+  /**
+   * Menyimpan data buku baru ke repository.
+   * Melakukan validasi input dan pengecekan duplikasi ISBN.
+   */
   private void store() {
     try {
       Map<String, String> formData = this.addView.getFormData();
@@ -156,6 +198,11 @@ public class BukuController {
     }
   }
 
+  /**
+   * Menampilkan form edit untuk buku dengan ISBN tertentu.
+   * 
+   * @param id ISBN buku yang akan diedit
+   */
   private void edit(String id) {
     try {
       Buku buku = this.bukuRepo.getByIsbn(id);
@@ -192,6 +239,11 @@ public class BukuController {
     }
   }
 
+  /**
+   * Mengupdate data buku yang sudah ada.
+   * 
+   * @param buku object buku yang akan diupdate
+   */
   public void update(Buku buku) {
     try {
       Map<String, String> formData = this.editView.getForm();
@@ -230,6 +282,12 @@ public class BukuController {
     }
   }
 
+  /**
+   * Menghapus buku dari repository.
+   * Melakukan validasi bahwa tidak ada eksemplar yang sedang dipinjam.
+   * 
+   * @param id ISBN buku yang akan dihapus
+   */
   private void destroy(String id) {
     int confirmation = JOptionPane.showConfirmDialog(
         this.indexView,
@@ -277,6 +335,12 @@ public class BukuController {
 
   // utils
 
+  /**
+   * Mengkonversi data buku menjadi format row tabel dengan fitur pencarian.
+   * 
+   * @param search keyword pencarian untuk filter data
+   * @return list array object yang merepresentasikan row tabel
+   */
   private List<Object[]> convertToTableRow(String search) {
     String processedSearch = search.trim().toLowerCase();
 
@@ -324,6 +388,9 @@ public class BukuController {
         .toList();
   }
 
+  /**
+   * Merefresh data tabel dengan data terbaru dari repository.
+   */
   private void refreshData() {
     String searchField = this.indexView.getSearchField().getText();
     this.indexView.setTableData(this.convertToTableRow(searchField));

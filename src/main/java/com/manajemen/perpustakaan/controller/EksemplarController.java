@@ -12,14 +12,35 @@ import com.manajemen.perpustakaan.repository.EksemplarBukuRepository;
 import com.manajemen.perpustakaan.view.EksemplarView;
 import com.manajemen.perpustakaan.view.column.action.ActionCallback;
 
+/**
+ * Controller untuk mengelola eksemplar/copy buku.
+ * Menangani operasi tambah dan hapus eksemplar buku tertentu.
+ * 
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class EksemplarController {
+  /** View untuk menampilkan daftar eksemplar */
   private EksemplarView view;
 
+  /** Repository untuk operasi data eksemplar buku */
   private EksemplarBukuRepository eksemplarBukuRepo;
+  
+  /** Repository untuk operasi data buku */
   private BukuRepository bukuRepo;
 
+  /** Callback untuk navigasi kembali ke halaman buku */
   private Runnable navigateToBuku;
 
+  /**
+   * Konstruktor untuk EksemplarController.
+   * 
+   * @param view view eksemplar
+   * @param bukuRepo repository buku
+   * @param eksemplarBukuRepo repository eksemplar buku
+   * @param navigateToBuku callback navigasi ke buku
+   */
   public EksemplarController(EksemplarView view, BukuRepository bukuRepo, EksemplarBukuRepository eksemplarBukuRepo,
       Runnable navigateToBuku) {
     this.view = view;
@@ -28,6 +49,11 @@ public class EksemplarController {
     this.navigateToBuku = navigateToBuku;
   }
 
+  /**
+   * Menampilkan daftar eksemplar untuk buku tertentu.
+   * 
+   * @param isbn ISBN buku yang eksemplarnya akan ditampilkan
+   */
   public void index(String isbn) {
     this.view.setVisible(true);
 
@@ -77,6 +103,12 @@ public class EksemplarController {
     }
   }
 
+  /**
+   * Menambahkan eksemplar baru untuk buku tertentu.
+   * Meminta input jumlah eksemplar yang akan ditambahkan.
+   * 
+   * @param buku object buku yang akan ditambahkan eksemplarnya
+   */
   public void store(Buku buku) {
     String totalInString = JOptionPane.showInputDialog(
         this.view,
@@ -106,6 +138,13 @@ public class EksemplarController {
     }
   }
 
+  /**
+   * Menghapus eksemplar buku.
+   * Validasi bahwa eksemplar tidak sedang dipinjam.
+   * 
+   * @param nomorEksemplar nomor eksemplar yang akan dihapus
+   * @param buku object buku pemilik eksemplar
+   */
   public void destroy(String nomorEksemplar, Buku buku) {
     int confirm = JOptionPane.showConfirmDialog(
         this.view,
@@ -142,6 +181,11 @@ public class EksemplarController {
     }
   }
 
+  /**
+   * Merefresh data tabel eksemplar dengan data terbaru.
+   * 
+   * @param buku object buku yang eksemplarnya akan ditampilkan
+   */
   private void refreshData(Buku buku) {
     List<Object[]> eksemplarList = this.eksemplarBukuRepo.getByIsbn(buku.getIsbn())
         .stream()

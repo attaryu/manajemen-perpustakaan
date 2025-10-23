@@ -15,11 +15,31 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.ArrayList;
 
+/**
+ * Generic JSON storage untuk persistence data entity ke file JSON.
+ * Menggunakan Gson untuk serialisasi dan deserialisasi.
+ * 
+ * @param <Entity> tipe entity yang akan disimpan
+ * @author attaryu
+ * @version 1.0
+ * @since 2025-10-08
+ */
 public class JSONStorage<Entity> {
+    /** Path file JSON untuk storage */
     private final Path filePath;
+    
+    /** Instance Gson untuk serialisasi/deserialisasi */
     private final Gson gson;
+    
+    /** Tipe data list entity untuk deserialisasi */
     private final Type listType;
 
+    /**
+     * Konstruktor yang menginisialisasi JSON storage.
+     * 
+     * @param filename nama file tanpa ekstensi (akan otomatis ditambah .json)
+     * @param listType tipe data list entity untuk deserialisasi
+     */
     public JSONStorage(String filename, Type listType) {
         this.filePath = Paths.get("data", filename + ".json");
         this.listType = listType;
@@ -35,6 +55,12 @@ public class JSONStorage<Entity> {
         }
     }
 
+    /**
+     * Membaca dan mengembalikan data entity dari file JSON.
+     * Mengembalikan list kosong jika file tidak ada atau error.
+     * 
+     * @return ArrayList berisi entity yang dibaca dari file
+     */
     public ArrayList<Entity> get() {
         if (!Files.exists(this.filePath)) {
             return new ArrayList<>();
@@ -49,6 +75,11 @@ public class JSONStorage<Entity> {
         }
     }
 
+    /**
+     * Menyimpan list entity ke file JSON.
+     * 
+     * @param list ArrayList entity yang akan disimpan
+     */
     public void put(ArrayList<Entity> list) {
         try (Writer writer = new FileWriter(this.filePath.toFile())) {
             this.gson.toJson(list, writer);
