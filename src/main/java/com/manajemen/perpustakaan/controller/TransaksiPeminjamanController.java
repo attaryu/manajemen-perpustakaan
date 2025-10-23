@@ -145,6 +145,8 @@ public class TransaksiPeminjamanController {
 
                     this.eksemplarBukuRepo
                             .getByIsbn(isbnBukuTerpilih)
+                            .stream()
+                            .filter(EksemplarBuku::isAvailable)
                             .forEach((eksemplar) -> eksemplarDropdown.addItem(eksemplar.getNomorEksemplar()));
                 }
             });
@@ -414,9 +416,9 @@ public class TransaksiPeminjamanController {
 
     private void refreshData() {
         DefaultTableModel viewTabelModel = (DefaultTableModel) this.indexView.getTableModel();
-        
+
         viewTabelModel.setRowCount(0);
-        
+
         String currentSearch = this.indexView.getSearchBar().getText();
         List<Object[]> data = this.convertToTableRow(currentSearch);
 
